@@ -1,5 +1,7 @@
-// Copyright Schulich Racing, FSAE
-// Written by Justin Tijunelis
+/* 
+Copyright Schulich Racing, FSAE
+Written by Justin Tijunelis
+*/ 
 
 #include <iostream>
 
