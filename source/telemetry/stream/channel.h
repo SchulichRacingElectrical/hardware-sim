@@ -4,30 +4,30 @@ Written by Justin Tijunelis
 */ 
 
 #pragma once
-#ifdef _WIN32
-#include <Windows.h>
-#else
-#include <unistd.h>
-#endif
-#include <type_traits>
 #include <functional>
 #include <optional>
 #include <mutex>
 #include <deque>
 
-template <typename T>
-  requires (std::is_arithmetic<T>::value)
-class Channel
-{
+class AbstractChannel {
+  public:
+    virtual ~AbstractChannel() {}
+};
+
+/**
+ * We assume that multiple threads can write to and read from the channel at once. 
+ * The channel may be open and closed by any thread as well.
+ */
+template <typename T> requires (std::is_arithmetic<T>::value)
+class Channel: public AbstractChannel {
 private:
+  std::optional<T> _value = std::nullopt;
   std::mutex _lock;
-  std::deque<T> _queue;
   bool _closed = false;
-  double _epsilon;
 
 public:
-  Channel(double e) : _epsilon(e) {}
   void send(T value);
-  std::optional<T> read();
+  std::optional<T> read() const;
+  void open();
   void close();
 };

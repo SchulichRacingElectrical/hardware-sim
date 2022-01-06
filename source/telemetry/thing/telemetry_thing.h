@@ -4,9 +4,11 @@ Written by Justin Tijunelis
 */ 
 
 #pragma once
+#include <string>
 
-class TelemetryObject {
+class TelemetryThing {
   private:
-
+    std::string _name;
+    
   public:
 };

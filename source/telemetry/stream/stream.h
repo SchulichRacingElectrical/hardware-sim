@@ -4,9 +4,9 @@ Written by Justin Tijunelis
 */ 
 
 #pragma once
+#include "channel.h"
 #include <unordered_map>
 #include <any>
-#include "channel.h"
 
 class Stream {
   private:
@@ -15,4 +15,7 @@ class Stream {
   public:
     Stream();
     ~Stream();
+
+    void create_channels(); // Pass sensors
+    std::any read_channel(unsigned int channel_id);
 };
