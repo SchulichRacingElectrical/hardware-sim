@@ -10,12 +10,11 @@ Written by Justin Tijunelis
 
 class Stream {
   private:
-    std::unordered_map<unsigned int, Channel<std::any>> channels;
+    std::unordered_map<unsigned int, AbstractChannel> channels;
 
   public:
     Stream();
     ~Stream();
 
     void create_channels(); // Pass sensors
-    std::any read_channel(unsigned int channel_id);
 };
