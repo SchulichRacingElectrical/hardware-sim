@@ -4,31 +4,12 @@ Written by Justin Tijunelis
 */ 
 
 #pragma once
-#include <iostream>
+#include "../thing/sensor.h"
 #include <tuple>
 #include <vector>
 #include <variant>
 #include <algorithm>
-// Testing
-#include <cassert>
-#include <bitset>
-
-/**
- * @brief This represents all the possible data types our system
- *  can read. Based on delegation with the team, we found
- *  that these datatypes can represent all of our sensors.
- *  In the future, this list may be expanded.
- */
-using SensorDataVariant =
-  std::variant<
-    long long, // q - char type representation from sensor
-    double,    // d
-    float,     // f
-    int,       // i
-    short,     // h
-    char,      // c
-    bool       // ?
-  >;
+#include <unordered_map>
 
 /**
  * @brief A tuple (sensor ID, SensorVariantData)
@@ -37,8 +18,8 @@ using SensorVariantPair = std::tuple<unsigned char, SensorDataVariant>;
 
 /**
  * @brief An array of bytes containing our sensor ids
- * and compressed data along with a size for sending 
- * sensor data of UDP. 
+ *  and compressed data along with a size for sending 
+ *  sensor data of UDP. 
  */
 using CompressedData = std::tuple<char*, size_t>; 
 
@@ -49,8 +30,7 @@ using CompressedData = std::tuple<char*, size_t>;
  *  all information needed to decode the data on the server side. 
  */
 class VFDCPEncoder {
-  private:
-    VFDCPEncoder() {}
+  VFDCPEncoder() {}
 
   public:
     VFDCPEncoder(const VFDCPEncoder&) = delete;
@@ -62,5 +42,8 @@ class VFDCPEncoder {
     }
 
     CompressedData encode_data(std::vector<SensorVariantPair>& data);
-    std::vector<SensorVariantPair> decode_data(CompressedData data);
+    std::vector<SensorVariantPair> decode_data(
+      char* data, 
+      std::unordered_map<unsigned char, Sensor>& sensors
+    );
 };
