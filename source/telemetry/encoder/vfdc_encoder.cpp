@@ -27,15 +27,15 @@ CompressedData VFDCPEncoder::encode_data(std::vector<SensorVariantPair>& data) {
   size += size_t(data.size()) + 1;
 
   // First, let's push the number of sensor values we expect
-  char* compressed_data = new char[size]; // NEED TO DELETE!
-  char* temp = compressed_data;
-  *temp = size_t(data.size());
-  temp++;
+  int index = 0;
+  std::vector<char> compressed_data(size, 0);
+  compressed_data[index] = size_t(data.size());
+  index++;
 
   // Append the sensor ids after the size specifier
   for (const SensorVariantPair &pair : data) {
-    *temp = std::get<0>(pair);
-    temp++;
+    compressed_data[index] = std::get<0>(pair);
+    index++;
   }
 
   // Append the sensor values after the list of identifiers, in order
@@ -45,8 +45,8 @@ CompressedData VFDCPEncoder::encode_data(std::vector<SensorVariantPair>& data) {
         size_t size = sizeof(v);
         char* value = static_cast<char*>(static_cast<void*>(&v));
         for (size_t i = 0; i < size; i++) {
-          *temp = *(value + i);
-          temp++;
+          compressed_data[index] = *(value + i);
+          index++;
         }
       },
       std::get<1>(pair));
@@ -55,7 +55,9 @@ CompressedData VFDCPEncoder::encode_data(std::vector<SensorVariantPair>& data) {
   return CompressedData{ compressed_data, size };
 }
 
-std::vector<SensorVariantPair> VFDCPEncoder::decode_data(char* data, std::unordered_map<unsigned char, Sensor>& sensors) {
+#include <iostream>
+
+std::vector<SensorVariantPair> VFDCPEncoder::decode_data(std::vector<char> data, std::unordered_map<unsigned char, Sensor>& sensors) {
   // Get the sensor ids
   size_t sensor_count = data[0];
   unsigned char sensor_ids[sensor_count];
@@ -64,7 +66,7 @@ std::vector<SensorVariantPair> VFDCPEncoder::decode_data(char* data, std::unorde
   }
 
   // Decode the data
-  char *temp = data + sensor_count + 1;
+  int index = sensor_count + 1;
   std::vector<SensorVariantPair> decoded{};
   for (const unsigned char& sensor_id: sensor_ids) {
     try {
@@ -74,8 +76,8 @@ std::vector<SensorVariantPair> VFDCPEncoder::decode_data(char* data, std::unorde
         char decoded_bytes[size];
         for (size_t i = 0; i < size; i++)
         {
-          decoded_bytes[i] = *temp;
-          temp++;
+          decoded_bytes[i] = data[index];
+          index++;
         }
         decltype(v) final_value = *static_cast<decltype(v)*>(static_cast<void*>(&decoded_bytes));
         decoded.emplace_back(sensor_id, final_value);
@@ -104,7 +106,7 @@ void test_encode_decode() {
   data.push_back({3, float(10)}); // 4
   data.push_back({4, int(4)}); // 4
   data.push_back({5, short(3)}); // 2
-  data.push_back({6, char(2)}); // 1
+  data.push_back({6, char(97)}); // 1
   data.push_back({7, bool(false)}); // 1
   CompressedData compressed = VFDCPEncoder::get().encode_data(data);
   
@@ -112,16 +114,13 @@ void test_encode_decode() {
   assert(std::get<1>(compressed) == 36);
 
   // Let's decompress the data
-  char *decoded = std::get<0>(compressed);
+  auto decoded = std::get<0>(compressed);
   std::vector<SensorVariantPair> uncompressed = VFDCPEncoder::get().decode_data(decoded, test_sensors);
   for (const auto& decode: uncompressed) {
     std::visit([](auto v)
-               { std::cout << (double)v << std::endl; },
+               { std::cout << v << std::endl; },
                std::get<1>(decode));
   }
-  // TODO: Create sensors
-  // Call decompression
-  // Compare first and new vector
 }
 
 void test_one_value()
@@ -137,7 +136,7 @@ void test_one_value()
   assert(std::get<1>(compressed) == 10);
 
   // Ensure out sensor count is 1
-  char *encoding = std::get<0>(compressed);
+  auto encoding = std::get<0>(compressed);
   assert(encoding[0] == 1);
 
   // Ensure the first byte is the char id = 1
@@ -156,7 +155,7 @@ int main() {
   test_sensors[5] = Sensor("E", 'h', 100, 5, 1, 1000, 0, -100, 100);
   test_sensors[6] = Sensor("F", 'c', 100, 5, 1, 1000, 0, -100, 100);
   test_sensors[7] = Sensor("G", '?', 100, 5, 1, 1000, 0, -100, 100);
-  // test_one_value();
+  test_one_value();
   test_encode_decode();
 }
 #endif

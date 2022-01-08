@@ -21,7 +21,7 @@ using SensorVariantPair = std::tuple<unsigned char, SensorDataVariant>;
  *  and compressed data along with a size for sending 
  *  sensor data of UDP. 
  */
-using CompressedData = std::tuple<char*, size_t>; 
+using CompressedData = std::tuple<std::vector<char>, size_t>; 
 
 /**
  * @brief Variable Frequency Data Compression Protocal Encoder
@@ -43,7 +43,7 @@ class VFDCPEncoder {
 
     CompressedData encode_data(std::vector<SensorVariantPair>& data);
     std::vector<SensorVariantPair> decode_data(
-      char* data, 
+      std::vector<char> data, 
       std::unordered_map<unsigned char, Sensor>& sensors
     );
 };
