@@ -17,6 +17,16 @@ Written by Justin Tijunelis
  */
 using SensorDataVariant = std::variant<long long, double, float, int, short, char, bool>;
 
+// sensor_types = {
+//   'q': 8,           # long long
+//   'd': 8,           # double
+//   'f': 4,           # float
+//   'i': 4,           # integer
+//   'h': 2,           # short
+//   'c': 1,           # char
+//   '?': 1,           # bool
+// }
+
 /**
  * TODO: We want to serialize the sensor to avoid storing json and also reduce data request size
  */
@@ -28,12 +38,14 @@ private:
   unsigned long int _last_update;
   unsigned int _frequency;
   unsigned int _channel_id;
-  double _upper_calibration;
+  double _upper_calibration; // Put in one
   double _lower_calibration;
-  double _min_value;
+  double _min_value; // Put in one
   double _max_value;
 
 public:
+  Sensor() {}
+  Sensor(const char *n, char t, unsigned long int lu, unsigned int f, unsigned int ci, double uc, double lc, double min, double max) : _name(n), _type(t), _last_update(lu), _frequency(f), _channel_id(ci), _upper_calibration(uc), _lower_calibration(lc), _min_value(min), _max_value(max) {}
   auto get_variant() const {
     SensorDataVariant variant;
     long long x = 0;
