@@ -9,7 +9,9 @@ Written by Justin Tijunelis
 #include <vector>
 #include <variant>
 #include <algorithm>
+// Testing
 #include <cassert>
+#include <bitset>
 
 /**
  * @brief This represents all the possible data types our system
@@ -60,4 +62,5 @@ class VFDCPEncoder {
     }
 
     CompressedData encode_data(std::vector<SensorVariantPair>& data);
+    std::vector<SensorVariantPair> decode_data(CompressedData data);
 };
