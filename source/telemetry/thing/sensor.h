@@ -38,21 +38,20 @@ struct SensorRange {
   double upper;
 };
 
-class Sensor { // Could make this a struct
-private: 
-  std::string _name;
-  unsigned char _id;
-  SensorType _type;
-  unsigned long int _last_update;
-  unsigned int _frequency;
-  unsigned int _channel_id;
-  SensorRange _calibration;
-  SensorRange _bounds;
-
+class Sensor {
 public:
+  std::string name;
+  unsigned char id;
+  SensorType _type;
+  unsigned long int last_update;
+  unsigned int frequency;
+  unsigned int channel_id;
+  SensorRange calibration;
+  SensorRange bounds;
+
   Sensor() {}
   Sensor(const char *n, char t, unsigned long int lu, unsigned int f, unsigned int ci, SensorRange c, SensorRange b) 
-    : _name(n), _type((SensorType)t), _last_update(lu), _frequency(f), _channel_id(ci), _calibration(c), _bounds(b) {}
+    : name(n), _type((SensorType)t), last_update(lu), frequency(f), channel_id(ci), calibration(c), bounds(b) {}
 
   /**
    * @brief Returns a variant that can be used to deduce 

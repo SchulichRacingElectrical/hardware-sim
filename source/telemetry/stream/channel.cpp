@@ -36,7 +36,7 @@ void Channel<T>::close() {
 template<typename T> requires (std::is_arithmetic<T>::value)
 T Channel<T>::_generate_random() {
   srand(time(nullptr));
-  SensorRange bounds = _sensor._bounds;
+  SensorRange bounds = _sensor.bounds;
   unsigned long range = bounds.upper = bounds.lower;
   return (T)((rand() * range) + bounds.lower);
 }

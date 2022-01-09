@@ -10,15 +10,16 @@ Stream::Stream(std::unordered_map<unsigned char, Sensor>& sensors) {
     std::visit(
       [&](auto v) {
         // Create a new channel
-        AbstractChannel *channel = new Channel<decltype(v)>(it->second);
-        _channels[it->second._channel_id] = channel;
-        if (_frequency < it->second._frequency) {
-          _frequency = it->second._frequency;
+        Sensor &sensor = it->second;
+        AbstractChannel *channel = new Channel<decltype(v)>(sensor, sensor.channel_id);
+        _channels[sensor.channel_id] = channel;
+        if (_frequency < it->second.frequency) {
+          _frequency = it->second.frequency;
         }
 
         // Create the stream buffer entry for the channel
         decltype(v) variant_type = 0;
-        _stream_buffer[it->second._channel_id] = variant_type;
+        _stream_buffer[channel->_channel_id] = variant_type;
       },
       it->second.get_variant()
     );
@@ -58,19 +59,19 @@ void Stream::_tap_channels() noexcept {
             }
 
             // Update the buffer if the value has significantly changed (0.5% difference)
-            SensorRange bounds = channel->_sensor._bounds;
+            SensorRange bounds = channel->_sensor.bounds;
             int epsilon = (bounds.upper - bounds.lower) * 0.005f;
             std::visit(
               [&](auto last_value) {
                 auto current_value = channel->read();
                 if (current_value.has_value()) {
                   if (abs(*current_value - last_value) > epsilon) {
-                    _stream_buffer[channel->_sensor._channel_id] = *current_value;
+                    _stream_buffer[channel->channel_id] = *current_value;
                     changed.push_back(it->first);
                   } 
                 }
               }, 
-              _stream_buffer[channel->_sensor._channel_id]
+              _stream_buffer[channel->channel_id]
             );
           }, 
           abstract_channel->_sensor.get_variant()
@@ -80,7 +81,7 @@ void Stream::_tap_channels() noexcept {
       // Create the data that only contains values for this timestep and have significantly changed
       std::vector<SensorVariantPair> data;
       for (const unsigned int& channel_id: changed) {
-        unsigned char sensor_id = _channels[channel_id]->_sensor._id;
+        unsigned char sensor_id = _channels[channel_id]->_sensor.id;
         auto value = _stream_buffer[channel_id];
         data.emplace_back(sensor_id, _stream_buffer);
       }
