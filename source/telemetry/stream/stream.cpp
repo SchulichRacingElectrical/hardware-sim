@@ -5,23 +5,22 @@ Written by Justin Tijunelis
 
 #include "stream.h"
 
-Stream::Stream(std::unordered_map<unsigned char, Sensor>& sensors) {
+Stream::Stream(std::vector<Sensor>& sensors) {
   for (auto it = sensors.begin(); it != sensors.end(); it++) {
     std::visit(
       [&](auto v) {
         // Create a new channel
-        Sensor &sensor = it->second;
-        AbstractChannel *channel = new Channel<decltype(v)>(sensor, sensor.channel_id);
-        _channels[sensor.channel_id] = channel;
-        if (_frequency < it->second.frequency) {
-          _frequency = it->second.frequency;
+        AbstractChannel *channel = new Channel<decltype(v)>(*it);
+        _channels[it->channel_id] = channel;
+        if (_frequency < it->frequency) {
+          _frequency = it->frequency;
         }
 
         // Create the stream buffer entry for the channel
         decltype(v) variant_type = 0;
-        _stream_buffer[channel->_channel_id] = variant_type;
+        _stream_buffer[it->channel_id] = variant_type;
       },
-      it->second.get_variant()
+      it->get_variant()
     );
   }
 }
@@ -66,12 +65,12 @@ void Stream::_tap_channels() noexcept {
                 auto current_value = channel->read();
                 if (current_value.has_value()) {
                   if (abs(*current_value - last_value) > epsilon) {
-                    _stream_buffer[channel->channel_id] = *current_value;
+                    _stream_buffer[channel->_sensor.channel_id] = *current_value;
                     changed.push_back(it->first);
                   } 
                 }
               }, 
-              _stream_buffer[channel->channel_id]
+              _stream_buffer[channel->_sensor.channel_id]
             );
           }, 
           abstract_channel->_sensor.get_variant()
@@ -151,4 +150,12 @@ void Stream::unpause() noexcept {
   if (!_closed) {
     _paused = false;
   }
+}
+
+bool Stream::is_open() const noexcept { // Do we need a lock?
+  return !_closed;
+}
+
+bool Stream::is_paused() const noexcept { // Do we need a lock?
+  return _paused;
 }

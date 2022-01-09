@@ -13,10 +13,9 @@ Written by Justin Tijunelis
 class AbstractChannel {
   protected:
     Sensor _sensor;
-    unsigned int _channel_id;
 
   public:
-    AbstractChannel(Sensor s, unsigned int c) : _sensor(s), _channel_id(c) {}
+    AbstractChannel(Sensor s) : _sensor(s) {}
     virtual ~AbstractChannel() {}
     virtual void open() = 0;
     virtual void close() = 0;
@@ -41,7 +40,7 @@ private:
 public:
   Channel<T>() = delete;
   template <class Sensor> 
-  Channel<T>(Sensor& s, unsigned int c) : AbstractChannel(s, c) {}
+  Channel<T>(Sensor& s) : AbstractChannel(s) {}
   Channel<T>(const Channel<T> &) = delete;
   Channel<T>(const Channel<T> &&) = delete;
   Channel<T> &operator=(const Channel &) = delete;

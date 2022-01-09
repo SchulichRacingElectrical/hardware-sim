@@ -58,7 +58,4 @@ public:
    * @return auto - A variant with the type set with 0
    */
   SensorDataVariant get_variant() const;
-
-  friend class AbstractChannel;
-  friend class Stream;
 };

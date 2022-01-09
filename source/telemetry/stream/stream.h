@@ -48,8 +48,9 @@ private:
    */
   void _tap_channels() noexcept;
 
-public: 
-  Stream(std::unordered_map<unsigned char, Sensor> &sensors);
+public:
+  Stream() = delete;
+  Stream(std::vector<Sensor> &sensors);
   ~Stream();
 
   /**
@@ -89,4 +90,14 @@ public:
    * Channels start where they left off. 
    */
   void unpause() noexcept;
+
+  /**
+   * @brief Returns whether the stream is open or not. 
+   */
+  bool is_open() const noexcept;
+
+  /**
+   * @brief Returns whether the stream is paused or not. 
+   */
+  bool is_paused() const noexcept;
 };

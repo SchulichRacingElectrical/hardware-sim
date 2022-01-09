@@ -76,8 +76,7 @@ std::vector<SensorVariantPair> VFDCPEncoder::decode_data(
         [&](auto v) {
           size_t size = sizeof(v);
           char decoded_bytes[size];
-          for (size_t i = 0; i < size; i++)
-          {
+          for (size_t i = 0; i < size; i++) {
             decoded_bytes[i] = data[index];
             index++;
           }
