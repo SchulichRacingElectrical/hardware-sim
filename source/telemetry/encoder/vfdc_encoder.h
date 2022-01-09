@@ -32,12 +32,12 @@ class VFDCPEncoder {
     /**
      * @brief 
      */
-    std::vector<char> encode_data(std::vector<SensorVariantPair>& data);
+    std::vector<char> encode_data(unsigned int timestamp, std::vector<SensorVariantPair>& data);
     
     /**
      * @brief 
      */
-    std::vector<SensorVariantPair> decode_data(
+    std::tuple<unsigned int, std::vector<SensorVariantPair>> decode_data(
       std::vector<char> data, 
       std::unordered_map<unsigned char, Sensor>& sensors
     );

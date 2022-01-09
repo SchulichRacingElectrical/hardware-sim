@@ -42,11 +42,27 @@ void TelemetryThing::on_stream_update(
   std::vector<SensorVariantPair> data
 ) {
   // Send the data to the transceiver
+  std::vector<char> bytes = encode_data(data);
+  _transceiver->send_vfdcp_data(bytes);
 }
 
 void TelemetryThing::_populate_sensors() {
-  // Get the sensor data from the transceiver
-  // Get the full set of data from the local system
-  // If it does not exist, fetch all sensors
-  // If it does exist, request sensor diff
+  // Fetch the sensors (FUTURE: Check if the sensors are stored on disk first)
+  _sensors = _transceiver->fetch_sensors();
+  unsigned long int most_recent_update = 0;
+  for (const auto& sensor: _sensors) {
+    if (most_recent_update < sensor.last_update) {
+      most_recent_update = sensor.last_update;
+    }
+  }
+
+  // Renconcile any sensors that need to be updated
+  std::unordered_map<unsigned char, Sensor> updated_sensors = _transceiver->fetch_sensor_diff(most_recent_update);
+  for (auto sensor: _sensors) {
+    if (updated_sensor.find(sensor.id) != updated_sensors.end()) {
+      swap(sensor, updated_sensors[sensor.id]);
+    }
+  }
+
+  // TODO: Store updated sensor list locally
 }

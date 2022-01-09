@@ -30,7 +30,7 @@ private:
   std::unordered_map<unsigned int, AbstractChannel*> _channels;
   std::unordered_map<unsigned int, SensorDataVariant> _stream_buffer;
   std::unordered_map<unsigned int, ReadCallback> _callbacks;
-  volatile unsigned long long _timestamp = 0;
+  volatile unsigned int _timestamp = 0;
   unsigned int _frequency = 0;
 
   std::thread _read_thread;

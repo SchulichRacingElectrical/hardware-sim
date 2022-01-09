@@ -4,11 +4,10 @@ Written by Justin Tijunelis
 */ 
 
 #pragma once
-#include "../stream/stream.h"
-#include "../stream/channel.h"
 #include <string>
 #include <variant>
 #include <exception>
+#include <iostream>
 
 /**
  * @brief This represents all the possible data types our system
@@ -57,5 +56,33 @@ public:
    * @brief Returns a variant that can be used to deduce 
    * @return auto - A variant with the type set with 0
    */
-  SensorDataVariant get_variant() const;
+  inline SensorDataVariant get_variant() const {
+      SensorDataVariant variant;
+      switch (_type) {
+        case SensorType::LONGLONG:
+          variant = (long long)(0);
+          return variant;
+        case SensorType::DOUBLE:
+          variant = double(0);
+          return variant;
+        case SensorType::FLOAT:
+          variant = float(0);
+          return variant;
+        case SensorType::INT:
+          variant = int(0);
+          return variant;
+        case SensorType::SHORT:
+          variant = short(0);
+          return variant;
+        case SensorType::CHAR:
+          variant = char(0);
+          return variant;
+        case SensorType::BOOL:
+          variant = bool(false);
+          return variant;
+        default:
+          throw std::runtime_error("Sensor does not have a supported type");
+        };
+      return variant;
+  }
 };

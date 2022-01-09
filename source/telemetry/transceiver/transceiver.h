@@ -26,7 +26,7 @@ class Transceiver {
     /**
      * @brief 
      */
-    std::vector<Sensor> fetch_sensor_diff(unsigned long long last_update);
+    std::unordered_map<unsigned char, Sensor> fetch_sensor_diff(unsigned long long last_update);
 
     /**
      * @brief 

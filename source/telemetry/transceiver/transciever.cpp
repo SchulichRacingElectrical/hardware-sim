@@ -14,7 +14,7 @@ std::vector<Sensor> Transceiver::fetch_sensors() {
   // Make request to sensor endpoint
 }
 
-std::vector<Sensor> Transceiver::fetch_sensor_diff(unsigned long long last_update) {
+std::unordered_map<unsigned char, Sensor> Transceiver::fetch_sensor_diff(unsigned long long last_update) {
   // Make request to get updated sensors
 }
 
