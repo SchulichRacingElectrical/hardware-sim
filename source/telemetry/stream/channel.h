@@ -39,8 +39,8 @@ private:
 
 public:
   Channel<T>() = delete;
-  template <class Sensor> // Require template type to be sensor... yikes
-  Channel<T>(Sensor& s) : AbstractChannel(s) {}
+  template <class S> requires (std::is_same<S, Sensor>::value)
+  Channel<T>(S& s) : AbstractChannel(s) {}
   Channel<T>(const Channel<T> &) = delete;
   Channel<T>(const Channel<T> &&) = delete;
   Channel<T> &operator=(const Channel &) = delete;
