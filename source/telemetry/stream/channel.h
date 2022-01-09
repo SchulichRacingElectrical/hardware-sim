@@ -15,11 +15,10 @@ class AbstractChannel {
     Sensor _sensor;
 
   public:
+    AbstractChannel(Sensor s) : _sensor(s) {}
     virtual ~AbstractChannel() {}
     virtual void open() = 0;
     virtual void close() = 0;
-
-    void set_sensor(Sensor &s) { _sensor = s; }
 
     friend class Stream;
 };
@@ -39,7 +38,9 @@ private:
   T _generate_random();
 
 public:
-  Channel<T>() : AbstractChannel() {} // TODO: Cannot pass sensor in constructor...
+  Channel<T>() = delete;
+  template <class Sensor> // Require template type to be sensor... yikes
+  Channel<T>(Sensor& s) : AbstractChannel(s) {}
   Channel<T>(const Channel<T> &) = delete;
   Channel<T>(const Channel<T> &&) = delete;
   Channel<T> &operator=(const Channel &) = delete;
