@@ -4,6 +4,8 @@ Written by Justin Tijunelis
 */ 
 
 #pragma once
+#include "../thing/sensor.h"
+#include "stream.h"
 #include <functional>
 #include <optional>
 #include <mutex>
@@ -11,23 +13,30 @@ Written by Justin Tijunelis
 
 class AbstractChannel {
   public:
+    Sensor& _sensor;
+
+  public:
+    AbstractChannel(Sensor& s) : _sensor(s) {}
     virtual ~AbstractChannel() {}
+
+    virtual void open() = 0;
+    virtual void close() = 0;
 };
 
-/**
- * We assume that multiple threads can write to and read from the channel at once. 
- * The channel may be open and closed by any thread as well.
- */
 template <typename T> requires (std::is_arithmetic<T>::value)
 class Channel: public AbstractChannel {
 private:
-  std::optional<T> _value = std::nullopt;
+  volatile T _value = 0;
   std::mutex _lock;
   bool _closed = false;
 
 public:
+  Channel<T>() {}
+  Channel<T>(Sensor& s) : AbstractChannel(s) {}
+
+  virtual void open() override;
+  virtual void close() override;
+
   void send(T value);
-  std::optional<T> read() const;
-  void open();
-  void close();
+  T read() const;
 };

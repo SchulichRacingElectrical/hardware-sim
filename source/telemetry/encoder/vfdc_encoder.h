@@ -12,11 +12,6 @@ Written by Justin Tijunelis
 #include <unordered_map>
 
 /**
- * @brief A tuple (sensor ID, SensorVariantData)
- */
-using SensorVariantPair = std::tuple<unsigned char, SensorDataVariant>;
-
-/**
  * @brief An array of bytes containing our sensor ids
  *  and compressed data along with a size for sending 
  *  sensor data of UDP. 

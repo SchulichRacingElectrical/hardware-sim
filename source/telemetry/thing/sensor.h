@@ -17,63 +17,44 @@ Written by Justin Tijunelis
  */
 using SensorDataVariant = std::variant<long long, double, float, int, short, char, bool>;
 
-// sensor_types = {
-//   'q': 8,           # long long
-//   'd': 8,           # double
-//   'f': 4,           # float
-//   'i': 4,           # integer
-//   'h': 2,           # short
-//   'c': 1,           # char
-//   '?': 1,           # bool
-// }
-
 /**
- * TODO: We want to serialize the sensor to avoid storing json and also reduce data request size
+ * @brief A tuple (sensor ID, SensorVariantData)
  */
+using SensorVariantPair = std::tuple<unsigned char, SensorDataVariant>;
 
-class Sensor {
-private:
+enum class SensorType : char {
+  LONGLONG = 'q',
+  DOUBLE = 'd',
+  FLOAT = 'f',
+  INT = 'i',
+  SHORT = 'h',
+  CHAR = 'c',
+  BOOL = '?'
+};
+
+struct SensorRange {
+  double lower;
+  double upper;
+};
+
+class Sensor { // Could make this a struct
+public: // Could allow friends from abstract channel
   std::string _name;
-  char _type;
+  unsigned char _id;
+  SensorType _type;
   unsigned long int _last_update;
   unsigned int _frequency;
   unsigned int _channel_id;
-  double _upper_calibration; // Put in one
-  double _lower_calibration;
-  double _min_value; // Put in one
-  double _max_value;
+  SensorRange _calibration;
+  SensorRange _bounds;
 
-public:
   Sensor() {}
-  Sensor(const char *n, char t, unsigned long int lu, unsigned int f, unsigned int ci, double uc, double lc, double min, double max) : _name(n), _type(t), _last_update(lu), _frequency(f), _channel_id(ci), _upper_calibration(uc), _lower_calibration(lc), _min_value(min), _max_value(max) {}
-  auto get_variant() const {
-    SensorDataVariant variant;
-    long long x = 0;
-    switch (_type) {
-      case 'q':
-        variant = x;
-        return variant;
-      case 'd':
-        variant = double(0);
-        return variant;
-      case 'f':
-        variant = float(0);
-        return variant;
-      case 'i':
-        variant = int(0);
-        return variant;
-      case 'h':
-        variant = short(0);
-        return variant;
-      case 'c':
-        variant = char(0);
-        return variant;
-      case '?':
-        variant = bool(false);
-        return variant;
-      default:
-        break;
-      };
-    throw std::runtime_error("Sensor does not have a supported type");
-  }
+  Sensor(const char *n, char t, unsigned long int lu, unsigned int f, unsigned int ci, SensorRange c, SensorRange b) 
+    : _name(n), _type((SensorType)t), _last_update(lu), _frequency(f), _channel_id(ci), _calibration(c), _bounds(b) {}
+
+  /**
+   * @brief Returns a variant that can be used to deduce 
+   * @return auto - A variant with the type set with 0
+   */
+  SensorDataVariant get_variant() const;
 };
