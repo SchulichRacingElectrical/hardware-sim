@@ -5,6 +5,7 @@ Written by Justin Tijunelis
 
 #pragma once
 #include "../thing/sensor.h"
+#include "../thing/telemetry_thing.h"
 #include "channel.h"
 #include <unordered_map>
 #include <memory>
@@ -20,7 +21,7 @@ Written by Justin Tijunelis
  * with Stream::subscribe, Stream::subscribe. Passes a timestamp to specify
  * the time of the data. 
  */
-using ReadCallback = std::function<void(unsigned long long, std::vector<SensorVariantPair>)>;
+using ReadCallback = std::function<void(unsigned int, std::vector<SensorVariantPair>)>;
 
 /**
  * @brief TODO - write stuff

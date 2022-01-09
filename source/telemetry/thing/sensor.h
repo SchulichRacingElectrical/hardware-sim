@@ -56,33 +56,5 @@ public:
    * @brief Returns a variant that can be used to deduce 
    * @return auto - A variant with the type set with 0
    */
-  inline SensorDataVariant get_variant() const {
-      SensorDataVariant variant;
-      switch (_type) {
-        case SensorType::LONGLONG:
-          variant = (long long)(0);
-          return variant;
-        case SensorType::DOUBLE:
-          variant = double(0);
-          return variant;
-        case SensorType::FLOAT:
-          variant = float(0);
-          return variant;
-        case SensorType::INT:
-          variant = int(0);
-          return variant;
-        case SensorType::SHORT:
-          variant = short(0);
-          return variant;
-        case SensorType::CHAR:
-          variant = char(0);
-          return variant;
-        case SensorType::BOOL:
-          variant = bool(false);
-          return variant;
-        default:
-          throw std::runtime_error("Sensor does not have a supported type");
-        };
-      return variant;
-  }
+  SensorDataVariant get_variant() const;
 };

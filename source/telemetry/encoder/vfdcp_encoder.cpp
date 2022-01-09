@@ -3,7 +3,7 @@ Copyright Schulich Racing, FSAE
 Written by Justin Tijunelis
 */ 
 
-#include "vfdc_encoder.h"
+#include "vfdcp_encoder.h"
 
 std::vector<char> VFDCPEncoder::encode_data(
   unsigned int timestamp, 

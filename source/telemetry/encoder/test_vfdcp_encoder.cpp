@@ -45,26 +45,26 @@ void test_encode_decode() {
 
 void test_one_value()
 {
-  // unsigned char id = 1;
-  // SensorDataVariant datum = double(1000);
-  // SensorVariantPair pair = {id, datum};
-  // std::vector<SensorVariantPair> data;
-  // data.push_back(pair);
-  // std::vector<char> compressed = VFDCPEncoder::get().encode_data(10, data);
+  unsigned char id = 1;
+  SensorDataVariant datum = double(1000);
+  SensorVariantPair pair = {id, datum};
+  std::vector<SensorVariantPair> data;
+  data.push_back(pair);
+  std::vector<char> compressed = VFDCPEncoder::get().encode_data(10, data);
 
-  // // Ensure our size is 10
-  // assert(compressed[0] == 10);
+  // Ensure our size is 10
+  assert(compressed[0] == 10);
 
-  // // Ensure out sensor count is 1
-  // auto encoding = std::get<0>(compressed);
-  // assert(encoding[0] == 1);
+  // Ensure out sensor count is 1
+  auto encoding = std::get<0>(compressed);
+  assert(encoding[0] == 1);
 
-  // // Ensure the first byte is the char id = 1
-  // assert(encoding[1] == 1);
+  // Ensure the first byte is the char id = 1
+  assert(encoding[1] == 1);
 
-  // // Ensure the first value is 1000
-  // double value = *(double *)(&encoding[2]);
-  // assert(value == 1000);
+  // Ensure the first value is 1000
+  double value = *(double *)(&encoding[2]);
+  assert(value == 1000);
 }
 
 int main() {

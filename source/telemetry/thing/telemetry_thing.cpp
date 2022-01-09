@@ -13,14 +13,21 @@ TelemetryThing::TelemetryThing(std::string n, std::string sn) : _name(n), _seria
 void TelemetryThing::start_telemetry() {
   if (_data_stream == nullptr) {
     _data_stream = std::make_unique<Stream>(_sensors);
-    _data_stream->subscribe(std::this_thread, &this->on_stream_update);
+    unsigned int id = std::hash<std::thread::id>()(std::this_thread::get_id());
+    auto callback = [&](unsigned int timestamp, std::vector<SensorVariantPair> data) {
+      std::vector<char> bytes = VFDCPEncoder::get().encode_data(timestamp, data);
+      _transceiver->send_vfdcp_data(bytes);
+      // Decode data in place for now. 
+    };
+    _data_stream->subscribe(id, callback);
   } 
   _data_stream->open();
 }
 
 void TelemetryThing::stop_telemetry() {
   if (_data_stream != nullptr) {
-    _data_stream->unsubscribe(std::this_thread::get_id());
+    unsigned int id = std::hash<std::thread::id>()(std::this_thread::get_id());
+    _data_stream->unsubscribe(id);
     _data_stream->close();
   }
 }
@@ -37,15 +44,6 @@ void TelemetryThing::unpause_telemetry() {
   }
 }
 
-void TelemetryThing::on_stream_update(
-  unsigned long long timestamp, 
-  std::vector<SensorVariantPair> data
-) {
-  // Send the data to the transceiver
-  std::vector<char> bytes = encode_data(data);
-  _transceiver->send_vfdcp_data(bytes);
-}
-
 void TelemetryThing::_populate_sensors() {
   // Fetch the sensors (FUTURE: Check if the sensors are stored on disk first)
   _sensors = _transceiver->fetch_sensors();
@@ -59,8 +57,8 @@ void TelemetryThing::_populate_sensors() {
   // Renconcile any sensors that need to be updated
   std::unordered_map<unsigned char, Sensor> updated_sensors = _transceiver->fetch_sensor_diff(most_recent_update);
   for (auto sensor: _sensors) {
-    if (updated_sensor.find(sensor.id) != updated_sensors.end()) {
-      swap(sensor, updated_sensors[sensor.id]);
+    if (updated_sensors.find(sensor.id) != updated_sensors.end()) {
+      std::swap(sensor, updated_sensors[sensor.id]);
     }
   }
 

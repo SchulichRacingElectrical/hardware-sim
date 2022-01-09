@@ -6,6 +6,7 @@ Written by Justin Tijunelis
 #pragma once
 #include "../thing/sensor.h"
 #include <vector>
+#include <unordered_map>
 
 class Transceiver {
   private:

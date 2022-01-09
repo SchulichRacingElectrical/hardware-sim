@@ -52,7 +52,7 @@ void Stream::_tap_channels() noexcept {
           [&](auto v) {
             // Cast the channel to the right type and check if we should read from the channel at this timestamp
             Channel<decltype(v)> *channel = dynamic_cast<Channel<decltype(v)>*>(abstract_channel);
-            unsigned int channel_frequency = channel->_sensor._frequency;
+            unsigned int channel_frequency = channel->_sensor.frequency;
             if (_timestamp % (channel_frequency / _frequency) != 0) {
               return;
             }

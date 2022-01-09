@@ -7,9 +7,12 @@ Written by Justin Tijunelis
 #include "sensor.h"
 #include "../stream/stream.h"
 #include "../transceiver/transceiver.h"
+#include "../encoder/vfdcp_encoder.h"
 #include <string>
 #include <vector>
 #include <memory>
+#include <thread>
+#include <functional>
 
 class TelemetryThing {
   private:
@@ -28,5 +31,4 @@ class TelemetryThing {
     void stop_telemetry();
     void pause_telemetry();
     void unpause_telemetry();
-    void on_stream_update(unsigned long long timestamp, std::vector<SensorVariantPair> data);
 };
