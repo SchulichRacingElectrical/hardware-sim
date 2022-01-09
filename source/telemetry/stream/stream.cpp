@@ -5,15 +5,16 @@ Written by Justin Tijunelis
 
 #include "stream.h"
 
-Stream::Stream(std::unordered_map<unsigned char, Sensor> &sensors) {
+Stream::Stream(std::unordered_map<unsigned char, Sensor>& sensors) {
   for (auto it = sensors.begin(); it != sensors.end(); it++) {
     std::visit(
       [&](auto v) {
         // Create a new channel
-        AbstractChannel* channel = new Channel<decltype(v)>(it->second);
+        AbstractChannel *channel = new Channel<decltype(v)>(it->second);
         _channels[it->second._channel_id] = channel;
-        if (_frequency < it->second._frequency)
+        if (_frequency < it->second._frequency) {
           _frequency = it->second._frequency;
+        }
 
         // Create the stream buffer entry for the channel
         decltype(v) variant_type = 0;
@@ -36,10 +37,12 @@ void Stream::_tap_channels() noexcept {
     // Narrow the lock scope
     {
       std::lock_guard<std::mutex> safe_lock(_lock);
-      if (_closed)
+      if (_closed) {
         return;
-      if (_paused)
+      }
+      if (_paused) {
         continue;
+      }
 
       // Read from every channel, update if the value has changed significantly
       std::vector<unsigned int> changed;
@@ -47,16 +50,25 @@ void Stream::_tap_channels() noexcept {
         AbstractChannel *abstract_channel = it->second;
         std::visit(
           [&](auto v) {
+            // Cast the channel to the right type and check if we should read from the channel at this timestamp
             Channel<decltype(v)> *channel = dynamic_cast<Channel<decltype(v)>*>(abstract_channel);
+            unsigned int channel_frequency = channel->_sensor._frequency;
+            if (_timestamp % (channel_frequency / _frequency) != 0) {
+              return;
+            }
+
+            // Update the buffer if the value has significantly changed (0.5% difference)
             SensorRange bounds = channel->_sensor._bounds;
-            int epsilon = (bounds.upper - bounds.lower) * 0.005f; // Less than 0.5% difference is not significant
+            int epsilon = (bounds.upper - bounds.lower) * 0.005f;
             std::visit(
               [&](auto last_value) {
                 auto current_value = channel->read();
-                if (abs(current_value - last_value) > epsilon) {
-                  _stream_buffer[channel->_sensor._channel_id] = current_value;
-                  changed.push_back(it->first);
-                } 
+                if (current_value.has_value()) {
+                  if (abs(*current_value - last_value) > epsilon) {
+                    _stream_buffer[channel->_sensor._channel_id] = *current_value;
+                    changed.push_back(it->first);
+                  } 
+                }
               }, 
               _stream_buffer[channel->_sensor._channel_id]
             );
@@ -73,43 +85,17 @@ void Stream::_tap_channels() noexcept {
         data.emplace_back(sensor_id, _stream_buffer);
       }
 
-      // Callback for subscribers of the stream. 
-      for (auto it = _callbacks.begin(); it != _callbacks.end(); it++) {
-        it->second(data);
+      // Notify all subscribers of a new data frame. 
+      if (data.size() != 0) {
+        for (auto it = _callbacks.begin(); it != _callbacks.end(); it++) {
+          it->second(_timestamp, data);
+        }
       }
+      _timestamp++;
     }
     // Run the loop at the highest channel frequency
     std::this_thread::sleep_for(spin_lock_time);
   }
-}
-
-void Stream::open() noexcept {
-  std::lock_guard<std::mutex> safe_lock(_lock);
-  if (_closed) {
-    _paused = false;
-    _closed = false;
-    _read_thread = std::thread(&Stream::_tap_channels, this);
-  }
-  if (_paused) _paused = false;
-}
-
-void Stream::close() noexcept {
-  {
-    std::lock_guard<std::mutex> safe_lock(_lock);
-    _paused = true;
-    _closed = true;
-  }
-  _read_thread.join();
-}
-
-void Stream::pause() noexcept {
-  std::lock_guard<std::mutex> safe_lock(_lock);
-  _paused = true;
-}
-
-void Stream::unpause() noexcept {
-  std::lock_guard<std::mutex> safe_lock(_lock);
-  _paused = false;
 }
 
 bool Stream::subscribe(unsigned int id, ReadCallback callback) noexcept {
@@ -129,5 +115,39 @@ bool Stream::unsubscribe(unsigned int id) noexcept {
   } else {
     _callbacks.erase(id);
     return true;
+  }
+}
+
+void Stream::open() noexcept {
+  std::lock_guard<std::mutex> safe_lock(_lock);
+  if (_closed)
+  {
+    _closed = false;
+    _read_thread = std::thread(&Stream::_tap_channels, this);
+  } 
+}
+
+void Stream::close() noexcept {
+  if (!_closed) {
+    {
+      std::lock_guard<std::mutex> safe_lock(_lock);
+      _paused = true;
+      _closed = true;
+    }
+    _read_thread.join();
+  }
+}
+
+void Stream::pause() noexcept {
+  std::lock_guard<std::mutex> safe_lock(_lock);
+  if (!_closed) {
+    _paused = true;
+  }
+}
+
+void Stream::unpause() noexcept {
+  std::lock_guard<std::mutex> safe_lock(_lock);
+  if (!_closed) {
+    _paused = false;
   }
 }

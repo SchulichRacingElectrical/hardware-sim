@@ -4,8 +4,6 @@ Written by Justin Tijunelis
 */ 
 
 #include "channel.h"
-#include <any>
-#include <iostream>
 
 template <typename T> requires (std::is_arithmetic<T>::value)
 void Channel<T>::send(T v) {
@@ -16,9 +14,10 @@ void Channel<T>::send(T v) {
 }
 
 template<typename T> requires (std::is_arithmetic<T>::value)
-std::optional<T> Channel<T>::read() const {
+std::optional<T> Channel<T>::read() {
   if (_closed) return std::nullopt;
   std::lock_guard<std::mutex> safe_lock(_lock);
+  _value = _generate_random();
   return _value;
 }
 
@@ -32,4 +31,12 @@ template<typename T> requires (std::is_arithmetic<T>::value)
 void Channel<T>::close() {
   std::lock_guard<std::mutex> safe_lock(_lock);
   _closed = true;
+}
+
+template<typename T> requires (std::is_arithmetic<T>::value)
+T Channel<T>::_generate_random() {
+  srand(time(nullptr));
+  SensorRange bounds = _sensor._bounds;
+  unsigned long range = bounds.upper = bounds.lower;
+  return (T)((rand() * range) + bounds.lower);
 }

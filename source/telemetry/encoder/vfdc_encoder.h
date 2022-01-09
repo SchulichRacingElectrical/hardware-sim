@@ -12,17 +12,10 @@ Written by Justin Tijunelis
 #include <unordered_map>
 
 /**
- * @brief An array of bytes containing our sensor ids
- *  and compressed data along with a size for sending 
- *  sensor data of UDP. 
- */
-using CompressedData = std::tuple<std::vector<char>, size_t>; 
-
-/**
- * @brief Variable Frequency Data Compression Protocal Encoder
- * @details A singleton class that provides an interface for passing 
- *  a list of variants and outputs a byte array containing
- *  all information needed to decode the data on the server side. 
+ * @brief Variable Frequency Data Compression Protocal Encoder.
+ * A singleton class that provides an interface for passing 
+ * a list of variants and outputs a byte array containing
+ * all information needed to decode the data on the server side. 
  */
 class VFDCPEncoder {
   VFDCPEncoder() {}
@@ -36,7 +29,14 @@ class VFDCPEncoder {
       return instance;
     }
 
-    CompressedData encode_data(std::vector<SensorVariantPair>& data);
+    /**
+     * @brief 
+     */
+    std::vector<char> encode_data(std::vector<SensorVariantPair>& data);
+    
+    /**
+     * @brief 
+     */
     std::vector<SensorVariantPair> decode_data(
       std::vector<char> data, 
       std::unordered_map<unsigned char, Sensor>& sensors

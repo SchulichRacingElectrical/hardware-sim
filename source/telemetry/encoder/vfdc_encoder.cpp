@@ -5,7 +5,7 @@ Written by Justin Tijunelis
 
 #include "vfdc_encoder.h"
 
-CompressedData VFDCPEncoder::encode_data(std::vector<SensorVariantPair>& data) {
+std::vector<char> VFDCPEncoder::encode_data(std::vector<SensorVariantPair>& data) {
   // Sort the variants from largest to smallest with respect to bytes.
   std::sort(data.begin(), data.end(),
     [](SensorVariantPair &a, SensorVariantPair &b) {
@@ -53,10 +53,13 @@ CompressedData VFDCPEncoder::encode_data(std::vector<SensorVariantPair>& data) {
     );
   }
 
-  return CompressedData{ compressed_data, size };
+  return compressed_data;
 }
 
-std::vector<SensorVariantPair> VFDCPEncoder::decode_data(std::vector<char> data, std::unordered_map<unsigned char, Sensor>& sensors) {
+std::vector<SensorVariantPair> VFDCPEncoder::decode_data(
+  std::vector<char> data, 
+  std::unordered_map<unsigned char, Sensor>& sensors
+) {
   // Get the sensor ids
   size_t sensor_count = data[0];
   unsigned char sensor_ids[sensor_count];
@@ -68,10 +71,9 @@ std::vector<SensorVariantPair> VFDCPEncoder::decode_data(std::vector<char> data,
   int index = sensor_count + 1;
   std::vector<SensorVariantPair> decoded{};
   for (const unsigned char& sensor_id: sensor_ids) {
-    try {
-      auto variant = sensors[sensor_id].get_variant();
+    auto variant = sensors[sensor_id].get_variant();
       std::visit(
-        [&](auto v) { // Does this run async?
+        [&](auto v) {
           size_t size = sizeof(v);
           char decoded_bytes[size];
           for (size_t i = 0; i < size; i++)
@@ -84,9 +86,6 @@ std::vector<SensorVariantPair> VFDCPEncoder::decode_data(std::vector<char> data,
         }, 
         variant
       );
-    } catch (...) {
-      throw std::runtime_error("Decoded sensor ID does not have a corresponding type.");
-    }
   }
 
   return decoded;

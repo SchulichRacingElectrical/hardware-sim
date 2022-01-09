@@ -4,7 +4,8 @@ Written by Justin Tijunelis
 */ 
 
 #pragma once
-#include <any>
+#include "../stream/stream.h"
+#include "../stream/channel.h"
 #include <string>
 #include <variant>
 #include <exception>
@@ -38,7 +39,7 @@ struct SensorRange {
 };
 
 class Sensor { // Could make this a struct
-public: // Could allow friends from abstract channel
+private: 
   std::string _name;
   unsigned char _id;
   SensorType _type;
@@ -48,6 +49,7 @@ public: // Could allow friends from abstract channel
   SensorRange _calibration;
   SensorRange _bounds;
 
+public:
   Sensor() {}
   Sensor(const char *n, char t, unsigned long int lu, unsigned int f, unsigned int ci, SensorRange c, SensorRange b) 
     : _name(n), _type((SensorType)t), _last_update(lu), _frequency(f), _channel_id(ci), _calibration(c), _bounds(b) {}
@@ -57,4 +59,7 @@ public: // Could allow friends from abstract channel
    * @return auto - A variant with the type set with 0
    */
   SensorDataVariant get_variant() const;
+
+  friend class AbstractChannel;
+  friend class Stream;
 };
