@@ -4,9 +4,8 @@ Written by Justin Tijunelis
 */ 
 
 #pragma once
-#include "../thing/sensor.h"
-#include "../thing/telemetry_thing.h"
 #include "channel.h"
+#include "../thing/sensor.h"
 #include <unordered_map>
 #include <memory>
 #include <vector>
@@ -23,9 +22,6 @@ Written by Justin Tijunelis
  */
 using ReadCallback = std::function<void(unsigned int, std::vector<SensorVariantPair>)>;
 
-/**
- * @brief TODO - write stuff
- */
 class Stream {
 private:
   std::unordered_map<unsigned int, AbstractChannel*> _channels;

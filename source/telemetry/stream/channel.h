@@ -5,22 +5,17 @@ Written by Justin Tijunelis
 
 #pragma once
 #include "../thing/sensor.h"
-#include "stream.h"
 #include <optional>
 #include <mutex>
 #include <ctime>
 
 class AbstractChannel {
-  protected:
-    Sensor _sensor;
-
   public:
-    AbstractChannel(Sensor s) : _sensor(s) {}
+    Sensor sensor;
+    AbstractChannel(Sensor s) : sensor(s) {}
     virtual ~AbstractChannel() {}
     virtual void open() = 0;
     virtual void close() = 0;
-
-    friend class Stream;
 };
 
 template <typename T> requires (std::is_arithmetic<T>::value)
@@ -67,3 +62,40 @@ public:
    */
   std::optional<T> read();
 };
+
+// Must define inside the header, otherwise stream cannot resolve specializations
+template <typename T> requires (std::is_arithmetic<T>::value)
+void Channel<T>::send(T v) {
+  if (!_closed) {
+    std::lock_guard<std::mutex> safe_lock(_lock);
+    _value = v;
+  }
+}
+
+template<typename T> requires (std::is_arithmetic<T>::value)
+std::optional<T> Channel<T>::read() {
+  if (_closed) return std::nullopt;
+  std::lock_guard<std::mutex> safe_lock(_lock);
+  _value = _generate_random();
+  return _value;
+}
+
+template<typename T> requires (std::is_arithmetic<T>::value)
+void Channel<T>::open() {
+  std::lock_guard<std::mutex> safe_lock(_lock);
+  _closed = false;
+}
+
+template<typename T> requires (std::is_arithmetic<T>::value)
+void Channel<T>::close() {
+  std::lock_guard<std::mutex> safe_lock(_lock);
+  _closed = true;
+}
+
+template<typename T> requires (std::is_arithmetic<T>::value)
+T Channel<T>::_generate_random() {
+  srand(time(nullptr));
+  SensorRange bounds = sensor.bounds;
+  unsigned long range = bounds.upper = bounds.lower;
+  return (T)((rand() * range) + bounds.lower);
+}

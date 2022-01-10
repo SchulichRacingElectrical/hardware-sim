@@ -17,7 +17,7 @@ void TelemetryThing::start_telemetry() {
     auto callback = [&](unsigned int timestamp, std::vector<SensorVariantPair> data) {
       std::vector<char> bytes = VFDCPEncoder::get().encode_data(timestamp, data);
       _transceiver->send_vfdcp_data(bytes);
-      // Decode data in place for now. 
+      // TODO: Decode data in place and send to server
     };
     _data_stream->subscribe(id, callback);
   } 

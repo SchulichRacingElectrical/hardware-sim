@@ -52,37 +52,37 @@ void Stream::_tap_channels() noexcept {
           [&](auto v) {
             // Cast the channel to the right type and check if we should read from the channel at this timestamp
             Channel<decltype(v)> *channel = dynamic_cast<Channel<decltype(v)>*>(abstract_channel);
-            unsigned int channel_frequency = channel->_sensor.frequency;
+            unsigned int channel_frequency = channel->sensor.frequency;
             if (_timestamp % (channel_frequency / _frequency) != 0) {
               return;
             }
 
             // Update the buffer if the value has significantly changed (0.5% difference)
-            SensorRange bounds = channel->_sensor.bounds;
+            SensorRange bounds = channel->sensor.bounds;
             int epsilon = (bounds.upper - bounds.lower) * 0.005f;
             std::visit(
               [&](auto last_value) {
                 auto current_value = channel->read();
                 if (current_value.has_value()) {
                   if (abs(*current_value - last_value) > epsilon) {
-                    _stream_buffer[channel->_sensor.channel_id] = *current_value;
+                    _stream_buffer[channel->sensor.channel_id] = *current_value;
                     changed.push_back(it->first);
                   } 
                 }
               }, 
-              _stream_buffer[channel->_sensor.channel_id]
+              _stream_buffer[channel->sensor.channel_id]
             );
           }, 
-          abstract_channel->_sensor.get_variant()
+          abstract_channel->sensor.get_variant()
         );
       }
 
       // Create the data that only contains values for this timestep and have significantly changed
       std::vector<SensorVariantPair> data;
       for (const unsigned int& channel_id: changed) {
-        unsigned char sensor_id = _channels[channel_id]->_sensor.id;
+        unsigned char sensor_id = _channels[channel_id]->sensor.id;
         auto value = _stream_buffer[channel_id];
-        data.emplace_back(sensor_id, _stream_buffer);
+        data.emplace_back(SensorVariantPair{sensor_id, value});
       }
 
       // Notify all subscribers of a new data frame. 
@@ -91,7 +91,7 @@ void Stream::_tap_channels() noexcept {
           it->second(_timestamp, data);
         }
       }
-      _timestamp++;
+      _timestamp = _timestamp + 1;
     }
     // Run the loop at the highest channel frequency
     std::this_thread::sleep_for(spin_lock_time);
