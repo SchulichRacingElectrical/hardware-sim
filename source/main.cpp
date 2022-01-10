@@ -15,3 +15,9 @@ int main() {
   // Note that in the future, all of this will be done through UI. 
   return 0;
 }
+
+// MVP:
+// No serious tests, except for the encoder
+// Just get to a point where we can spawn some objects with some sensors. 
+// Create a nice readme file and make sure the project can be started from scratch. 
+// Try getting to a point where everything can be run after a build. 

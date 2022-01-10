@@ -9,6 +9,7 @@ Written by Justin Tijunelis
 #include <unordered_map>
 #include <iostream>
 #include <sys/socket.h>
+#include <httplib.h>
 
 class Transceiver {
   private:
