@@ -7,6 +7,8 @@ Written by Justin Tijunelis
 #include "../thing/sensor.h"
 #include <vector>
 #include <unordered_map>
+#include <iostream>
+#include <sys/socket.h>
 
 class Transceiver {
   private:
@@ -20,12 +22,12 @@ class Transceiver {
     ~Transceiver();
 
     /**
-     * @brief 
+     * @brief Fetch the entire list of sensors for the particular serial number of a "thing."
      */
     std::vector<Sensor> fetch_sensors();
 
     /**
-     * @brief 
+     * @brief Fetch the sensors that have changed since the last update 
      */
     std::unordered_map<unsigned char, Sensor> fetch_sensor_diff(unsigned long long last_update);
 

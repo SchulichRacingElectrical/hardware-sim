@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build",
+  "command": "/usr/bin/clang++   -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk -mmacosx-version-min=12.0 -std=gnu++2a -o CMakeFiles/telemetry-sim.dir/source/main.cpp.o -c /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/source/main.cpp",
+  "file": "/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/source/main.cpp"
+}
+]

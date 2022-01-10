@@ -20,9 +20,10 @@ std::unordered_map<unsigned char, Sensor> Transceiver::fetch_sensor_diff(unsigne
 
 bool Transceiver::request_session() {
   // Request the server to start a new UDP sensor session
+  
   return false;
 }
 
 void send_vfdcp_data(std::vector<char>& bytes) {
-  // Send the byte array over UDP to the endpoint
+  
 }
