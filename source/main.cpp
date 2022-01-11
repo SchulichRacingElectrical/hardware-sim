@@ -32,13 +32,14 @@ int main() {
   std::cout << "- In the future, this program will have a GUI made with Qt, and will connect to the SR-Velocty" << std::endl;
   std::cout << "database. This program is a proof of concept but is under active development." << std::endl;
 
-  std::vector<TelemetryThing*> things;
+  std::vector<std::unique_ptr<TelemetryThing>> things;
   bool quit = false;
   while (!quit) {
     print_instructions();
     std::string line;
     std::getline(std::cin, line);
-    if (line == "thing") {
+    if (line == "thing")
+    {
       std::cout << "What is the name of your thing? Enter 'e' to exit, or 'q' to quit." << std::endl;
       std::string thing_name;
       while (1) {
@@ -69,8 +70,7 @@ int main() {
                 if (exists) {
                   std::cout << "A thing with this serial number already exists! Please try again." << std::endl;
                 } else {
-                  TelemetryThing* thing = new TelemetryThing(thing_name, thing_sin);
-                  things.push_back(thing);
+                  things.push_back(std::make_unique<TelemetryThing>(thing_name, thing_sin));
                   std::cout << "Fantastic! You created " << thing_name << " with serial number " << thing_sin << "." << std::endl;
                   break;
                 }
@@ -98,32 +98,31 @@ int main() {
           std::cout << "Name: " << (*it)->_name << "; " << "Serial Number: " << (*it)->_serial_number << std::endl;
         }
         std::cout << "----------------------" << std::endl;
-        // For some STUPID reason, when I delete a telemetry thing, it causes the input to run forever...
-        std::cout << "If you want to delete a thing, enter it's name. Enter 'e' to exit this view, or 'q' to quit the program." << std::endl;
-        while (1) {
-          std::string input;
-          std::getline(std::cin, input);
-          if (input != "q" && input != "e") {
-            int index = -1;
-            for (int i = 0; i < things.size(); i++) {
-              if (things[i]->_name == input) {
-                index = i;
-                delete things[i];
-                break;
-              }
-            }
-            if (index != -1) {
-              things.erase(things.begin() + index);
-              std::cout << "Thing " << input << " was removed!" << std::endl;
-              break;
-            } else {
-              std::cout << "Oops, the program couldn't find your thing. Please try again. Enter 'e' to exit this view, or 'q' to quit the program." << std::endl;
-            }
-          } else {
-            if (input == "q") quit = true;
-            break;
-          }
-        }
+        // For some reason 
+        // std::cout << "If you want to delete a thing, enter it's name. Enter 'e' to exit this view, or 'q' to quit the program." << std::endl;
+        // while (1) {
+        //   std::string input;
+        //   std::getline(std::cin, input);
+        //   if (input != "q" && input != "e") {
+        //     int index = -1;
+        //     for (int i = 0; i < things.size(); i++) {
+        //       if (things[i]->_name == input) {
+        //         index = i;
+        //         break;
+        //       }
+        //     }
+        //     if (index != -1) {
+        //       things.erase(things.begin() + index);
+        //       std::cout << "Thing " << input << " was removed!" << std::endl;
+        //       break;
+        //     } else {
+        //       std::cout << "Oops, the program couldn't find your thing. Please try again. Enter 'e' to exit this view, or 'q' to quit the program." << std::endl;
+        //     }
+        //   } else {
+        //     if (input == "q") quit = true;
+        //     break;
+        //   }
+        // }
       }
     }
     else if (line == "start")
@@ -158,11 +157,8 @@ int main() {
     else
     {
       std::cout << "Invalid input, please try again." << std::endl;
-      sleep(5);
     }
   }
 
-  for (int i = 0; i < things.size(); i++)
-    delete things[i];
   return 0;
 }
