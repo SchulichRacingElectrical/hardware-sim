@@ -4,6 +4,7 @@ Written by Justin Tijunelis
 */ 
 
 #include "stream.h"
+#include <iostream>
 
 Stream::Stream(std::vector<Sensor>& sensors) {
   for (auto it = sensors.begin(); it != sensors.end(); it++) {
@@ -32,7 +33,7 @@ Stream::~Stream() {
 }
 
 void Stream::_tap_channels() noexcept {
-  auto spin_lock_time = std::chrono::milliseconds((1 / _frequency) * 1000);
+  std::unordered_set<unsigned int> change_set;
   while (1) {
     // Narrow the lock scope
     {
@@ -45,7 +46,6 @@ void Stream::_tap_channels() noexcept {
       }
 
       // Read from every channel, update if the value has changed significantly
-      std::vector<unsigned int> changed;
       for (auto it = _channels.begin(); it != _channels.end(); it++) {
         AbstractChannel *abstract_channel = it->second;
         std::visit(
@@ -53,7 +53,8 @@ void Stream::_tap_channels() noexcept {
             // Cast the channel to the right type and check if we should read from the channel at this timestamp
             Channel<decltype(v)> *channel = dynamic_cast<Channel<decltype(v)>*>(abstract_channel);
             unsigned int channel_frequency = channel->sensor.frequency;
-            if (_timestamp % (channel_frequency / _frequency) != 0) {
+            float divisor = floor(1000.0f / float(channel_frequency));
+            if (std::fmod(_timestamp, divisor) > std::numeric_limits<float>::epsilon()) {
               return;
             }
 
@@ -66,8 +67,8 @@ void Stream::_tap_channels() noexcept {
                 if (current_value.has_value()) {
                   if (abs(*current_value - last_value) > epsilon) {
                     _stream_buffer[channel->sensor.channel_id] = *current_value;
-                    changed.push_back(it->first);
-                  } 
+                    change_set.insert(it->first);
+                  }
                 }
               }, 
               _stream_buffer[channel->sensor.channel_id]
@@ -79,32 +80,34 @@ void Stream::_tap_channels() noexcept {
 
       // Create the data that only contains values for this timestep and have significantly changed
       std::vector<SensorVariantPair> data;
-      for (const unsigned int& channel_id: changed) {
+      for (const unsigned int& channel_id: change_set) {
         unsigned char sensor_id = _channels[channel_id]->sensor.id;
         auto value = _stream_buffer[channel_id];
         data.emplace_back(SensorVariantPair{sensor_id, value});
       }
 
       // Notify all subscribers of a new data frame. 
-      if (data.size() != 0) {
+      float min_divisor = floor(1000.0f / _frequency);
+      if (data.size() != 0 && std::fmod(_timestamp, min_divisor) < std::numeric_limits<float>::epsilon()) {
         for (auto it = _callbacks.begin(); it != _callbacks.end(); it++) {
           it->second(_timestamp, data);
         }
+        change_set.clear();
       }
       _timestamp = _timestamp + 1;
     }
     // Run the loop at the highest channel frequency
-    std::this_thread::sleep_for(spin_lock_time);
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
   }
 }
 
 bool Stream::subscribe(unsigned int id, ReadCallback callback) noexcept {
   std::lock_guard<std::mutex> safe_lock(_lock);
   if (_callbacks.find(id) == _callbacks.end()) {
-    return false;
-  } else {
     _callbacks[id] = callback;
     return true;
+  } else {
+    return false;
   }
 }
 
@@ -123,6 +126,7 @@ void Stream::open() noexcept {
   if (_closed)
   {
     _closed = false;
+    _paused = false;
     _read_thread = std::thread(&Stream::_tap_channels, this);
   } 
 }

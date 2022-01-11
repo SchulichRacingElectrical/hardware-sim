@@ -13,6 +13,8 @@ Written by Justin Tijunelis
 #include <functional>
 #include <chrono>
 #include <thread>
+#include <limits>
+#include <unordered_set>
 
 /**
  * @brief Data publication callback; used to receive variable frequency
@@ -28,7 +30,7 @@ private:
   std::unordered_map<unsigned int, SensorDataVariant> _stream_buffer;
   std::unordered_map<unsigned int, ReadCallback> _callbacks;
   volatile unsigned int _timestamp = 0;
-  unsigned int _frequency = 0;
+  unsigned char _frequency = 0;
 
   std::thread _read_thread;
   std::mutex _lock;

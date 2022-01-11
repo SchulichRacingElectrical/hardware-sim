@@ -30,6 +30,7 @@ SensorDataVariant Sensor::get_variant() const {
         return variant;
       case SensorType::BOOL:
         variant = bool(false);
+        return variant;
       default:
         throw std::runtime_error("Sensor does not have a supported type");
       };

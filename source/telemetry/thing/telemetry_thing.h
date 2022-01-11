@@ -13,6 +13,7 @@ Written by Justin Tijunelis
 #include <memory>
 #include <thread>
 #include <functional>
+#include <unordered_map>
 
 class TelemetryThing {
   private:

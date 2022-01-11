@@ -58,9 +58,11 @@ public:
 
   /**
    * @brief Fetches the next value from the data generator, enqueues the value,
-   * and sends the most recent data. 
+   * and sends the most recent data. The timestamp is passed as a parameter to
+   * read from the correct timestamp of a file. Time stamps are stored at the 
+   * highest frequency of all sensors, (i.e. 10Hz means timestamps are multiples of 100).
    */
-  std::optional<T> read();
+  std::optional<T> read(unsigned int timestamp);
 };
 
 // Must define inside the header, otherwise stream cannot resolve specializations
@@ -73,7 +75,7 @@ void Channel<T>::send(T v) {
 }
 
 template<typename T> requires (std::is_arithmetic<T>::value)
-std::optional<T> Channel<T>::read() {
+std::optional<T> Channel<T>::read(unsigned int timestamp) {
   if (_closed) return std::nullopt;
   std::lock_guard<std::mutex> safe_lock(_lock);
   _value = _generate_random();
@@ -96,6 +98,14 @@ template<typename T> requires (std::is_arithmetic<T>::value)
 T Channel<T>::_generate_random() {
   srand(time(nullptr));
   SensorRange bounds = sensor.bounds;
-  unsigned long range = bounds.upper = bounds.lower;
-  return (T)((rand() * range) + bounds.lower);
+  unsigned long range = bounds.upper - bounds.lower;
+  int decision = rand() % 2 + 1;
+  switch (decision) {
+    case 1:
+      return _value + 1;
+    case 2:
+      return _value - 1;
+    default:
+      return _value;
+  }
 }

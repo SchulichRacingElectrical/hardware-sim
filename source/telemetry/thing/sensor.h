@@ -43,14 +43,14 @@ public:
   unsigned char id;
   SensorType _type;
   unsigned long int last_update;
-  unsigned int frequency;
+  unsigned char frequency; // max frequency of 255
   unsigned int channel_id;
   SensorRange calibration;
   SensorRange bounds;
 
   Sensor() {}
-  Sensor(const char *n, char t, unsigned long int lu, unsigned int f, unsigned int ci, SensorRange c, SensorRange b) 
-    : name(n), _type((SensorType)t), last_update(lu), frequency(f), channel_id(ci), calibration(c), bounds(b) {}
+  Sensor(const char *n, unsigned char i, char t, unsigned long int lu, unsigned char f, unsigned int ci, SensorRange c, SensorRange b) 
+    : name(n), id(i), _type((SensorType)t), last_update(lu), frequency(f), channel_id(ci), calibration(c), bounds(b) {}
 
   /**
    * @brief Returns a variant that can be used to deduce 

@@ -4,8 +4,14 @@ Written by Justin Tijunelis
 */ 
 
 #include "gtest/gtest.h"
+#include <telemetry/thing/sensor.h>
+#include <telemetry/encoder/vfdcp_encoder.h>
+#include <cassert>
+#include <bitset>
+#include <iostream>
+#include <unordered_map>
 
-TEST(TelemetrySim, ExampleTest) {
+TEST(VFDCPEncoderTests, TestSingleEncode) {
   EXPECT_TRUE(true);
 }
 

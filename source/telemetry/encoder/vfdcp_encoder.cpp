@@ -5,7 +5,7 @@ Written by Justin Tijunelis
 
 #include "vfdcp_encoder.h"
 
-std::vector<char> VFDCPEncoder::encode_data(
+std::vector<unsigned char> VFDCPEncoder::encode_data(
   unsigned int timestamp, 
   std::vector<SensorVariantPair>& data
 ) {
@@ -31,12 +31,12 @@ std::vector<char> VFDCPEncoder::encode_data(
 
   // First, let's push the number of sensor values we expect
   int index = 0;
-  std::vector<char> compressed_data(size, 0);
+  std::vector<unsigned char> compressed_data(size, 0);
   compressed_data[index] = size_t(data.size());
   index++;
 
   // Then, we can insert the timestamp
-  char* timestamp_bytes = reinterpret_cast<char*>(&timestamp);
+  unsigned char* timestamp_bytes = reinterpret_cast<unsigned char*>(&timestamp);
   for (size_t i = 0; i < 4; i++) {
     compressed_data[index] = *(timestamp_bytes + i);
     index++;
@@ -53,7 +53,7 @@ std::vector<char> VFDCPEncoder::encode_data(
     std::visit(
       [&](auto v) {
         size_t size = sizeof(v);
-        char* value = reinterpret_cast<char*>(&v);
+        unsigned char* value = reinterpret_cast<unsigned char*>(&v);
         for (size_t i = 0; i < size; i++) {
           compressed_data[index] = *(value + i);
           index++;
@@ -69,12 +69,12 @@ std::vector<char> VFDCPEncoder::encode_data(
 #include <iostream>
 
 std::tuple<unsigned int, std::vector<SensorVariantPair>> VFDCPEncoder::decode_data(
-  std::vector<char> data, 
+  std::vector<unsigned char> data, 
   std::unordered_map<unsigned char, Sensor>& sensors
 ) {
   // Get the sensor ids and current timestamp
   size_t sensor_count = data[0];
-  unsigned int timestamp = data[1] + (data[2] >> 8) + (data[3] >> 16) + (data[4] >> 24);
+  unsigned int timestamp = data[1] + (data[2] << 8) + (data[3] << 16) + (data[4] << 24);
   unsigned char sensor_ids[sensor_count];
   for (int i = 5; i < sensor_count + 5; i++) {
     sensor_ids[i - 5] = data[i];
@@ -88,7 +88,7 @@ std::tuple<unsigned int, std::vector<SensorVariantPair>> VFDCPEncoder::decode_da
       std::visit(
         [&](auto v) {
           size_t size = sizeof(v);
-          char decoded_bytes[size];
+          unsigned char decoded_bytes[size];
           for (size_t i = 0; i < size; i++) {
             decoded_bytes[i] = data[index];
             index++;
