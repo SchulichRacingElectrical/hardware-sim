@@ -154,10 +154,10 @@ void Stream::unpause() noexcept {
   }
 }
 
-bool Stream::is_open() const noexcept { // Do we need a lock?
+bool Stream::is_open() const noexcept {
   return !_closed;
 }
 
-bool Stream::is_paused() const noexcept { // Do we need a lock?
+bool Stream::is_paused() const noexcept {
   return _paused;
 }

@@ -10,18 +10,25 @@ TelemetryThing::TelemetryThing(std::string n, std::string sn) : _name(n), _seria
   _populate_sensors();
 }
 
+TelemetryThing::~TelemetryThing() {
+  if (_data_stream != nullptr)
+    stop_telemetry();
+}
+
 // TODO: Add logic for starting and stopping the transceiver. 
 void TelemetryThing::start_telemetry() {
   if (_data_stream == nullptr) {
     _data_stream = std::make_unique<Stream>(_sensors);
     unsigned int id = std::hash<std::thread::id>()(std::this_thread::get_id());
-    auto callback = [&](unsigned int timestamp, std::vector<SensorVariantPair> data) {
+    auto callback = [&](unsigned int timestamp, std::vector<SensorVariantPair> data)
+    {
       std::vector<unsigned char> bytes = VFDCPEncoder::get().encode_data(timestamp, data);
       _transceiver->send_vfdcp_data(bytes);
 
       // TESTING LOGS
-      std::cout << "<-" << _name << " sending compressed data: 0x";
-      for (int i = 0; i < bytes.size(); i++) {
+      std::cout << "<-" << _name << " sending " << bytes.size() << " bytes of compressed data: 0x";
+      for (int i = 0; i < bytes.size(); i++)
+      {
         std::cout << std::hex << (0xFF & bytes[i]);
       }
       std::cout << "\n";
@@ -29,14 +36,16 @@ void TelemetryThing::start_telemetry() {
 
       // Decode
       std::unordered_map<unsigned char, Sensor> sensor_map;
-      for (auto sensor: _sensors) {
+      for (auto sensor: _sensors)
+      {
         sensor_map[sensor.id] = sensor;
       }
       auto [ts, uncompressed] = VFDCPEncoder::get().decode_data(bytes, sensor_map);
       std::cout << "->Server received data from " << _name << " with timestamp ";
       printf("%u", ts);
       std::cout << ":\n";
-      for (const auto& value: uncompressed) {
+      for (const auto& value: uncompressed)
+      {
         auto sensor_id = std::get<0>(value);
         std::visit(
           [&](auto v) { 
@@ -45,6 +54,7 @@ void TelemetryThing::start_telemetry() {
           std::get<1>(value)
         );
       }
+      std::cout << std::endl;
     };
     _data_stream->subscribe(id, callback);
   } 
@@ -56,6 +66,7 @@ void TelemetryThing::stop_telemetry() {
     unsigned int id = std::hash<std::thread::id>()(std::this_thread::get_id());
     _data_stream->unsubscribe(id);
     _data_stream->close();
+    _data_stream = nullptr;
   }
 }
 

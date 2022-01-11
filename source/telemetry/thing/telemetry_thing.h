@@ -27,9 +27,12 @@ class TelemetryThing {
 
   public:
     TelemetryThing(std::string n, std::string sn);
+    ~TelemetryThing();
 
     void start_telemetry();
     void stop_telemetry();
     void pause_telemetry();
     void unpause_telemetry();
+
+    friend int main();
 };
