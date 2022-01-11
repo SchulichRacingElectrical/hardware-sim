@@ -24,12 +24,39 @@ Written by Justin Tijunelis
  */
 using ReadCallback = std::function<void(unsigned int, std::vector<SensorVariantPair>)>;
 
+/**
+ * @brief The gathering point for sensor data. The stream reads from channels and holds 
+ * a buffer of the most recent values. The system will handle frequency synchronization, 
+ * "significant" data updates (only send data if it has changed significantly). The stream
+ * is thread-safe and may be used by multiple threads. 
+ */
 class Stream {
 private:
+  /**
+   * @brief A map of abstract channels that may be reinterpret casted to a specialization.
+   */
   std::unordered_map<unsigned int, AbstractChannel*> _channels;
+
+  /**
+   * @brief The most recent values of sensors in the system. 
+   */
   std::unordered_map<unsigned int, SensorDataVariant> _stream_buffer;
+
+  /**
+   * @brief Callbacks that are called when new data is available. Callbacks will be
+   * executed at the highest frequency of all channels. 
+   */
   std::unordered_map<unsigned int, ReadCallback> _callbacks;
+
+  /**
+   * @brief The timestamp of the stream when it is in use in ms. Used internally to
+   * determine when sensor values should be read. 
+   */
   volatile unsigned int _timestamp = 0;
+
+  /**
+   * @brief The maximum frequency of all channels; the frequency the stream runs at. 
+   */
   unsigned char _frequency = 0;
 
   std::thread _read_thread;

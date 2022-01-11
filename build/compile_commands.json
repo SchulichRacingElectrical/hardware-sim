@@ -71,8 +71,33 @@
 },
 {
   "directory": "/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/test",
+  "command": "/usr/bin/clang++  -I/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/source -I/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/inc -isystem /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/lib/googletest/googletest/include -isystem /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/lib/googletest/googletest -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk -mmacosx-version-min=12.0 -std=gnu++2a -o CMakeFiles/TelemetrySim_test.dir/test_channel_stream_integration.cpp.o -c /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/test/test_channel_stream_integration.cpp",
+  "file": "/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/test/test_channel_stream_integration.cpp"
+},
+{
+  "directory": "/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/test",
   "command": "/usr/bin/clang++  -I/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/source -I/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/inc -isystem /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/lib/googletest/googletest/include -isystem /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/lib/googletest/googletest -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk -mmacosx-version-min=12.0 -std=gnu++2a -o CMakeFiles/TelemetrySim_test.dir/test_stream.cpp.o -c /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/test/test_stream.cpp",
   "file": "/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/test/test_stream.cpp"
+},
+{
+  "directory": "/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/test",
+  "command": "/usr/bin/clang++  -I/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/source -I/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/inc -isystem /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/lib/googletest/googletest/include -isystem /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/lib/googletest/googletest -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk -mmacosx-version-min=12.0 -std=gnu++2a -o CMakeFiles/TelemetrySim_test.dir/test_telemetry_thing.cpp.o -c /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/test/test_telemetry_thing.cpp",
+  "file": "/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/test/test_telemetry_thing.cpp"
+},
+{
+  "directory": "/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/test",
+  "command": "/usr/bin/clang++  -I/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/source -I/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/inc -isystem /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/lib/googletest/googletest/include -isystem /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/lib/googletest/googletest -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk -mmacosx-version-min=12.0 -std=gnu++2a -o CMakeFiles/TelemetrySim_test.dir/test_thing_stream_integration.cpp.o -c /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/test/test_thing_stream_integration.cpp",
+  "file": "/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/test/test_thing_stream_integration.cpp"
+},
+{
+  "directory": "/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/test",
+  "command": "/usr/bin/clang++  -I/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/source -I/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/inc -isystem /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/lib/googletest/googletest/include -isystem /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/lib/googletest/googletest -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk -mmacosx-version-min=12.0 -std=gnu++2a -o CMakeFiles/TelemetrySim_test.dir/test_thing_transceiver_integration.cpp.o -c /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/test/test_thing_transceiver_integration.cpp",
+  "file": "/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/test/test_thing_transceiver_integration.cpp"
+},
+{
+  "directory": "/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/test",
+  "command": "/usr/bin/clang++  -I/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/source -I/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/inc -isystem /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/lib/googletest/googletest/include -isystem /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/lib/googletest/googletest -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk -mmacosx-version-min=12.0 -std=gnu++2a -o CMakeFiles/TelemetrySim_test.dir/test_transceiver.cpp.o -c /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/test/test_transceiver.cpp",
+  "file": "/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/test/test_transceiver.cpp"
 },
 {
   "directory": "/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/test",

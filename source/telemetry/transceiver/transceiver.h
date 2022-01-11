@@ -14,6 +14,11 @@ Written by Justin Tijunelis
 
 using json = nlohmann::json;
 
+/**
+ * @brief Presently incomplete class used for interacting with the server. Uses a combination
+ * of REST API calls, TCP socket for direct messaging (e.g. sending data to a car for transmission),
+ * UDP socket for sending compressed data for real-time. 
+ */
 class Transceiver {
   private:
     std::string _serial_number;
@@ -39,7 +44,8 @@ class Transceiver {
     /**
      * @brief Fetch the sensors that have changed since the last update 
      */
-    std::unordered_map<unsigned char, Sensor> fetch_sensor_diff(unsigned long long last_update);
+    std::unordered_map<unsigned char, Sensor> 
+    fetch_sensor_diff(unsigned long long last_update);
 
     /**
      * @brief Requests the server to start a session, gets a UDP port to send to if successful. 

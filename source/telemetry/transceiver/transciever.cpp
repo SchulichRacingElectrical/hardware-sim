@@ -9,6 +9,7 @@ Written by Justin Tijunelis
 
 Transceiver::~Transceiver() {
   _client.set_keep_alive(false);
+  free(&_server_address);
   close(_sockfd);
 }
 
@@ -24,12 +25,12 @@ std::vector<Sensor> Transceiver::fetch_sensors() {
     }
   #else
     // For testing purposes
-    sensors.push_back(Sensor("A", 0, 'q', 100, 7, 1, {-100, 100}, {-100, 100}));
-    sensors.push_back(Sensor("B", 1, 'd', 100, 8, 2, {-100, 100}, {-100, 100}));
-    sensors.push_back(Sensor("C", 2, 'f', 100, 3, 3, {-100, 100}, {-100, 100}));
-    sensors.push_back(Sensor("D", 3, 'i', 100, 5, 4, {-100, 100}, {-100, 100}));
+    sensors.push_back(Sensor("A", 0, 'q', 100, 2, 1, {-100, 100}, {-100, 100}));
+    sensors.push_back(Sensor("B", 1, 'd', 100, 3, 2, {-100, 100}, {-100, 100}));
+    sensors.push_back(Sensor("C", 2, 'f', 100, 1, 3, {-100, 100}, {-100, 100}));
+    sensors.push_back(Sensor("D", 3, 'i', 100, 4, 4, {-100, 100}, {-100, 100}));
     sensors.push_back(Sensor("E", 4, 'h', 100, 2, 5, {-100, 100}, {-100, 100}));
-    sensors.push_back(Sensor("F", 5, 'c', 100, 10, 6, {-100, 100}, {-100, 100}));
+    sensors.push_back(Sensor("F", 5, 'c', 100, 3, 6, {-100, 100}, {-100, 100}));
     sensors.push_back(Sensor("G", 6, '?', 100, 1, 7, {0, 1}, {0, 1}));
   #endif
   return sensors;

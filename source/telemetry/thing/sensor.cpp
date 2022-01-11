@@ -4,12 +4,12 @@ Written by Justin Tijunelis
 */ 
 
 #include "sensor.h"
+#include <iostream>
 
-// This is pretty yikes, but we need to a way to convert the type identifier from the database into 
-// a concerete type. 
+// There must be a better way to do this...
 SensorDataVariant Sensor::get_variant() const {
     SensorDataVariant variant;
-    switch (_type) {
+    switch (sensor_type) {
       case SensorType::LONGLONG:
         variant = (long long)(0);
         return variant;

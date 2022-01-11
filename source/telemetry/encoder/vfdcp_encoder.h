@@ -30,12 +30,15 @@ class VFDCPEncoder {
     }
 
     /**
-     * @brief 
+     * @brief Encodes data into the format:
+     * Sensor Count (1 Byte), Timestamp (4 bytes), Sensors IDs (Variable; Equal to Sensor Count), 
+     * Sensor Values (Variable; A function of sensor type and Sensor Count)
      */
     std::vector<unsigned char> encode_data(unsigned int timestamp, std::vector<SensorVariantPair>& data);
     
     /**
-     * @brief 
+     * @brief Decodes data from the format above. Returns a tuple containing the data's 
+     * timestamp and all of the data. 
      */
     std::tuple<unsigned int, std::vector<SensorVariantPair>> decode_data(
       std::vector<unsigned char> data, 

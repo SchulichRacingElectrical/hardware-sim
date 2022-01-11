@@ -7,6 +7,7 @@ Written by Justin Tijunelis
 #include <iostream>
 
 Stream::Stream(std::vector<Sensor>& sensors) {
+  // Create channels and the stream buffer
   for (auto it = sensors.begin(); it != sensors.end(); it++) {
     std::visit(
       [&](auto v) {
@@ -64,7 +65,7 @@ void Stream::_tap_channels() noexcept {
       // Perform a read on the change_set if the timestamp aligns with the highest channel frequency
       float min_divisor = floor(1000.0f / _frequency);
       if (std::fmod(_timestamp, min_divisor) < std::numeric_limits<float>::epsilon()) {
-        // Read from the channels and append if they have significantly change
+        // Determine which channel data should go into the next frequency synchronization
         std::vector<SensorVariantPair> data;
         for (const unsigned int& channel_id: change_set) {
           std::visit(
@@ -94,7 +95,6 @@ void Stream::_tap_channels() noexcept {
       }
       _timestamp = _timestamp + 1;
     }
-    // Run the loop at the highest channel frequency
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
   }
 }

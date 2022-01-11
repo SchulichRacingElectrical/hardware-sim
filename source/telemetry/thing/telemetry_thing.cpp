@@ -25,36 +25,39 @@ void TelemetryThing::start_telemetry() {
       std::vector<unsigned char> bytes = VFDCPEncoder::get().encode_data(timestamp, data);
       _transceiver->send_vfdcp_data(bytes);
 
-      // TESTING LOGS
-      std::cout << "<-" << _name << " sending " << bytes.size() << " bytes of compressed data: 0x";
-      for (int i = 0; i < bytes.size(); i++)
-      {
-        std::cout << std::hex << (0xFF & bytes[i]);
-      }
-      std::cout << "\n";
-      std::cout << std::dec;
+      #define TESTING 1
+      #if TESTING == 1
+        // TESTING LOGS
+        std::cout << "<-" << _name << " sending " << bytes.size() << " bytes of compressed data: 0x";
+        for (int i = 0; i < bytes.size(); i++)
+        {
+          std::cout << std::hex << (0xFF & bytes[i]);
+        }
+        std::cout << "\n";
+        std::cout << std::dec;
 
-      // Decode
-      std::unordered_map<unsigned char, Sensor> sensor_map;
-      for (auto sensor: _sensors)
-      {
-        sensor_map[sensor.id] = sensor;
-      }
-      auto [ts, uncompressed] = VFDCPEncoder::get().decode_data(bytes, sensor_map);
-      std::cout << "->Server received data from " << _name << " with timestamp ";
-      printf("%u", ts);
-      std::cout << ":\n";
-      for (const auto& value: uncompressed)
-      {
-        auto sensor_id = std::get<0>(value);
-        std::visit(
-          [&](auto v) { 
-            std::cout << "Sensor with id " << int(sensor_id) << " has value " << int(v) << std::endl; 
-          },
-          std::get<1>(value)
-        );
-      }
-      std::cout << std::endl;
+        // Decode
+        std::unordered_map<unsigned char, Sensor> sensor_map;
+        for (auto sensor: _sensors)
+        {
+          sensor_map[sensor.id] = sensor;
+        }
+        auto [ts, uncompressed] = VFDCPEncoder::get().decode_data(bytes, sensor_map);
+        std::cout << "->Server received data from " << _name << " with timestamp ";
+        printf("%u", ts);
+        std::cout << ":\n";
+        for (const auto& value: uncompressed)
+        {
+          auto sensor_id = std::get<0>(value);
+          std::visit(
+            [&](auto v) { 
+              std::cout << "Sensor with id " << int(sensor_id) << " has value " << int(v) << std::endl; 
+            },
+            std::get<1>(value)
+          );
+        }
+        std::cout << std::endl;
+      #endif
     };
     _data_stream->subscribe(id, callback);
   } 
@@ -83,7 +86,9 @@ void TelemetryThing::unpause_telemetry() {
 }
 
 void TelemetryThing::_populate_sensors() {
-  // Fetch the sensors (FUTURE: Check if the sensors are stored on disk first)
+  // TODO: Check if the sensors are stored on disk, if not, fetch all from the server
+  
+  // Fetch the sensors if they are not on disk
   _sensors = _transceiver->fetch_sensors();
   unsigned long int most_recent_update = 0;
   for (const auto& sensor: _sensors) {

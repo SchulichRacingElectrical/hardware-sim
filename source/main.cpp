@@ -98,31 +98,7 @@ int main() {
           std::cout << "Name: " << (*it)->_name << "; " << "Serial Number: " << (*it)->_serial_number << std::endl;
         }
         std::cout << "----------------------" << std::endl;
-        // For some reason 
-        // std::cout << "If you want to delete a thing, enter it's name. Enter 'e' to exit this view, or 'q' to quit the program." << std::endl;
-        // while (1) {
-        //   std::string input;
-        //   std::getline(std::cin, input);
-        //   if (input != "q" && input != "e") {
-        //     int index = -1;
-        //     for (int i = 0; i < things.size(); i++) {
-        //       if (things[i]->_name == input) {
-        //         index = i;
-        //         break;
-        //       }
-        //     }
-        //     if (index != -1) {
-        //       things.erase(things.begin() + index);
-        //       std::cout << "Thing " << input << " was removed!" << std::endl;
-        //       break;
-        //     } else {
-        //       std::cout << "Oops, the program couldn't find your thing. Please try again. Enter 'e' to exit this view, or 'q' to quit the program." << std::endl;
-        //     }
-        //   } else {
-        //     if (input == "q") quit = true;
-        //     break;
-        //   }
-        // }
+        std::cout << "Deletion coming soon!" << std::endl;
       }
     }
     else if (line == "start")

@@ -9,6 +9,10 @@ Written by Justin Tijunelis
 #include <mutex>
 #include <ctime>
 
+/**
+ * @brief Abstract class that specialized channels inherit from. Used for simplified
+ * storage of Channel specializations that can be reinterpreted. 
+ */
 class AbstractChannel {
   public:
     Sensor sensor;
@@ -18,6 +22,10 @@ class AbstractChannel {
     virtual void close() = 0;
 };
 
+/**
+ * @brief A templated channel that holds the type of the sensor. Generates data
+ * for a Stream. 
+ */
 template <typename T> requires (std::is_arithmetic<T>::value)
 class Channel: public AbstractChannel {
 private:
@@ -65,7 +73,7 @@ public:
   std::optional<T> read(unsigned int timestamp);
 };
 
-// Must define inside the header, otherwise stream cannot resolve specializations
+// Must define inside the header, otherwise Stream cannot resolve specializations
 template <typename T> requires (std::is_arithmetic<T>::value)
 void Channel<T>::send(T v) {
   if (!_closed) {
@@ -97,8 +105,6 @@ void Channel<T>::close() {
 template<typename T> requires (std::is_arithmetic<T>::value)
 T Channel<T>::_generate_random() {
   srand(time(nullptr));
-  SensorRange bounds = sensor.bounds;
-  unsigned long range = bounds.upper - bounds.lower;
   int decision = rand() % 2 + 1;
   switch (decision) {
     case 1:
