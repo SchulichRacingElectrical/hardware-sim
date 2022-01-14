@@ -84,7 +84,7 @@ void Stream::_tap_channels() noexcept {
           );
         }
 
-        // Notify the subscribers of new data
+        // Notify the subscribers of new data; TODO: Call this async
         if (data.size() != 0) {
           for (auto it = _callbacks.begin(); it != _callbacks.end(); it++) {
             it->second(_timestamp, data);

@@ -123,8 +123,10 @@ void Transceiver::start_session() {
 }
 
 void Transceiver::stop_session() {
+  #if TESTING == 0
   _client.set_keep_alive(false);
   close(_sockfd);
+  #endif
 }
 
 void Transceiver::send_vfdcp_data(std::vector<unsigned char>& bytes) {

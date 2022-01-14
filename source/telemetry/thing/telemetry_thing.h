@@ -18,6 +18,9 @@ Written by Justin Tijunelis
 #include <thread>
 #include <ctime>
 
+/**
+ * @brief 
+ */
 class TelemetryThing {
   private:
     std::string _name;
@@ -26,6 +29,7 @@ class TelemetryThing {
     std::unique_ptr<Stream> _data_stream;
     std::unique_ptr<Transceiver> _transceiver;
     std::vector<Sensor> _sensors;
+    std::string _last_line; // Temporary for storing last line of file when writing
 
     /**
      * @brief Reconciles locally stored sensors and those on the cloud, updates 

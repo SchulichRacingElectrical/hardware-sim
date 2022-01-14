@@ -26,8 +26,11 @@ void TelemetryThing::start_telemetry() {
       auto callback = [&](unsigned int timestamp, std::vector<SensorVariantPair> data) {
         std::vector<unsigned char> bytes = VFDCPEncoder::get().encode_data(timestamp, data);
         _transceiver->send_vfdcp_data(bytes);
+        std::string path = "./storage/" + _serial_number + "_" + std::ctime(&_session_start_time) + "_data.txt";
+        _last_line = ThingWriter::write_sensor_data(_sensors, data, timestamp, _last_line, path);
+
+        // TEMPORARY
         _log_transmission(bytes);
-        ThingWriter::write_sensor_data(_sensors, data, _serial_number, _session_start_time);
       };
       _data_stream->subscribe(id, callback);
     } else {
@@ -44,6 +47,7 @@ void TelemetryThing::stop_telemetry() {
     _data_stream->unsubscribe(id);
     _data_stream->close();
     _data_stream = nullptr;
+    _last_line = "";
   }
 }
 

@@ -13,7 +13,7 @@ Sensor::Sensor(std::vector<std::string> keys, std::vector<std::string> values) {
   for (int i = 0; i < keys.size(); i++) {
     std::string key = keys[i];
     if (key == "name") data[key] = values[i];
-    else if (key == "id") data[key] = ((unsigned char)values[i][0]);
+    else if (key == "id") data[key] = std::stoi(values[i]);
     else if (key == "type") data[key] = (char)std::stoi(values[i]);
     else if (key == "last_update") data[key] = std::stoul(values[i]);
     else if (key == "frequency") data[key] = (unsigned char)std::stoul(values[i]);

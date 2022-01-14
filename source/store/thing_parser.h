@@ -13,6 +13,10 @@ Written by Justin Tijunelis
 #include <fstream>
 #include <iostream>
 
+/**
+ * @brief A class with static methods that allows a thing to read its sensors and data.
+ * This class will be changed in the near future to be instanced by a telemetry thing. 
+ */
 class ThingParser {
   public:
     ThingParser() = delete;
@@ -85,6 +89,7 @@ std::vector<SensorDataVariant> ThingParser::read_sensor_data(
   const std::string &file_name,
   const Sensor& sensor
 ) {
+  // TODO, will be used for channels reading from a file rather than generating random data. 
   return {};
 }
 

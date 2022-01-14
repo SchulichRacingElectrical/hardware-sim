@@ -14,11 +14,15 @@ Written by Justin Tijunelis
 #include <fstream>
 #include <vector>
 #include <string>
-#include <cstdio>
-#include <ctime>
+//#include <cstdio>
 
 using json = nlohmann::json;
 
+/**
+ * @brief A collection holding static class methods for writing/storing sensor data for a thing
+ * along with telemetry session data. This class will be changed to be used as an intance by a
+ * thing in the future. 
+ */
 class ThingWriter {
   public:
     ThingWriter() = delete;
@@ -35,13 +39,15 @@ class ThingWriter {
     /**
      * @brief Writes new sensor data to a file. The method will read the previous line of the file
      * and populate non-updated sensors with their previous value in a new row. If a file does not
-     * yet exist, it will name the file "SerialNumber_Date_data.txt".
+     * yet exist, it will name the file "SerialNumber_Date_data.txt". This function will soon be 
+     * changed as constantly opening and closing ofstreams is bad. 
      */
-    static void write_sensor_data(
-      const std::vector<Sensor>& sensors, 
-      const std::vector<SensorVariantPair>& data, 
-      const std::string& serial_number, 
-      const std::time_t& date
+    static std::string write_sensor_data(
+      const std::vector<Sensor> &sensors,
+      const std::vector<SensorVariantPair>& data,
+      const unsigned int& timestamp,
+      const std::string& last_line,
+      const std::string& path
     );
 
     /**
@@ -79,18 +85,17 @@ void ThingWriter::write_sensors(
   }
 }
 
-void ThingWriter::write_sensor_data(
-  const std::vector<Sensor>& sensors, 
-  const std::vector<SensorVariantPair>& data, 
-  const std::string& serial_number, 
-  const std::time_t& date
+std::string ThingWriter::write_sensor_data(
+  const std::vector<Sensor> &sensors,
+  const std::vector<SensorVariantPair>& data,
+  const unsigned int& timestamp,
+  const std::string& last_line,
+  const std::string& path
 ) {
-  // What if sensors of data has length zero?
-  std::string path = "./storage/" + serial_number + "_" + std::ctime(&date) + "_data.txt";
-
   // Create a vector to determine the order of the columns
   std::vector<std::string> column_names;
-  for (const Sensor &sensor: sensors) {
+  column_names.push_back("Timestamp");
+  for (const Sensor &sensor : sensors) {
     column_names.push_back(sensor.traits["name"]);
   }
 
@@ -106,6 +111,7 @@ void ThingWriter::write_sensor_data(
     data_map[sensor_map[std::get<0>(datum)].traits["name"]] = std::get<1>(datum);
   }
 
+  std::string data_row;
   if (std::filesystem::exists(path) == false) {
     // Create the file and write the first column
     std::ofstream out_file(path);
@@ -119,32 +125,27 @@ void ThingWriter::write_sensor_data(
     out_file << column_name_row << std::endl;
 
     // Create the first data string
-    std::string data_row;
-    for (const std::string &column_name : column_names) {
-      if (data_map.find(column_name) != data_map.end()) {
-        std::visit([&](auto v) {
-          data_row += std::to_string(v) + ",";
-        }, data_map[column_name]);
+    data_row += std::to_string(timestamp) + ",";
+    for (int i = 1; i < column_names.size(); i++) {
+      if (data_map.find(column_names[i]) != data_map.end()) {
+        std::visit(
+          [&](auto v) {
+            data_row += std::to_string(v) + ",";
+          },
+          data_map[column_names[i]]);
       } else {
         data_row += "0,";
       }
     }
     data_row.pop_back();
-    out_file << data_row << std::endl;
+    out_file << data_row;
     out_file.close();
   } else {
-    // Find the last row in the file
-    std::ifstream file_reader(path);
-    file_reader.seekg(-1, std::ios_base::end);
-    std::string last_line;
-    std::getline(file_reader, last_line);
-    file_reader.close();
-    std::vector<std::string> last_row = ThingParser::parse_row(last_line);
-
     // Write to the last line of the file, populate missing columns with previous values
+    std::vector<std::string> last_row = ThingParser::parse_row(last_line);
     std::ofstream out_file(path, std::ios::app);
-    std::string data_row;
-    for (int i = 0; i < column_names.size(); i++) {
+    data_row += std::to_string(timestamp) + ",";
+    for (int i = 1; i < column_names.size(); i++) {
       if (data_map.find(column_names[i]) != data_map.end()) {
         std::visit(
           [&](auto v) {
@@ -153,13 +154,14 @@ void ThingWriter::write_sensor_data(
           data_map[column_names[i]]
         );
       } else {
-        data_row += last_row[i];
+        data_row += last_row[i] + ",";
       }
     }
     data_row.pop_back();
     out_file << data_row << std::endl;
     out_file.close();
   }
+  return data_row;
 }
 
 std::string ThingWriter::create_sensor_row(const json& traits, bool keys) {
@@ -169,11 +171,7 @@ std::string ThingWriter::create_sensor_row(const json& traits, bool keys) {
       row += element.key() + ",";
     } else {
       auto value = element.value();
-      if (value.is_string()) {
-        row += value + ",";
-      } else {
-        row += to_string(value) + ",";
-      }        
+      row += (value.is_string() ? std::string(value) : to_string(value)) + ",";
     }
   }
   row.pop_back();
