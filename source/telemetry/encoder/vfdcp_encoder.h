@@ -3,8 +3,10 @@ Copyright Schulich Racing, FSAE
 Written by Justin Tijunelis
 */ 
 
-#pragma once
-#include "../thing/sensor.h"
+#ifndef VFDCP_ENCODER_H
+#define VFDCP_ENCODER_H
+
+#include <telemetry/thing/sensor.h>
 #include <tuple>
 #include <vector>
 #include <variant>
@@ -45,3 +47,5 @@ class VFDCPEncoder {
       std::unordered_map<unsigned char, Sensor>& sensors
     );
 };
+
+#endif

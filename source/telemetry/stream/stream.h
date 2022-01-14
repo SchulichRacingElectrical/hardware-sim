@@ -3,9 +3,11 @@ Copyright Schulich Racing, FSAE
 Written by Justin Tijunelis
 */ 
 
-#pragma once
+#ifndef STREAM_H
+#define STREAM_H
+
 #include "channel.h"
-#include "../thing/sensor.h"
+#include <telemetry/thing/sensor.h>
 #include <unordered_map>
 #include <memory>
 #include <vector>
@@ -61,7 +63,6 @@ private:
 
   std::thread _read_thread;
   std::mutex _lock;
-  bool _paused = true;
   bool _closed = true;
 
   /**
@@ -106,24 +107,9 @@ public:
   void close() noexcept;
 
   /**
-   * @brief Pauses the stream if it is open. 
-   * Channels stop updating their data. 
-   */
-  void pause() noexcept;
-
-  /**
-   * @brief Unpauses the stream if it is open. 
-   * Channels start where they left off. 
-   */
-  void unpause() noexcept;
-
-  /**
    * @brief Returns whether the stream is open or not. 
    */
   bool is_open() const noexcept;
-
-  /**
-   * @brief Returns whether the stream is paused or not. 
-   */
-  bool is_paused() const noexcept;
 };
+
+#endif

@@ -3,7 +3,9 @@ Copyright Schulich Racing, FSAE
 Written by Justin Tijunelis
 */ 
 
-#pragma once
+#ifndef TRANSCEIVER_H
+#define TRANSCEIVER_H
+
 #include "../thing/sensor.h"
 #include <vector>
 #include <unordered_map>
@@ -59,7 +61,14 @@ class Transceiver {
     void start_session();
 
     /**
+     * @brief Closes the TCP connection that receives messages from the server.
+     */
+    void stop_session();
+
+    /**
      * @brief Sends compressed data to the server via UDP
      */
     void send_vfdcp_data(std::vector<unsigned char>& bytes);
 };
+
+#endif

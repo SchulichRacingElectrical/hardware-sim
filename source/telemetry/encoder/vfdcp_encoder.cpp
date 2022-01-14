@@ -66,17 +66,13 @@ std::vector<unsigned char> VFDCPEncoder::encode_data(
   return compressed_data;
 }
 
-#include <iostream>
-
 std::tuple<unsigned int, std::vector<SensorVariantPair>> VFDCPEncoder::decode_data(
   std::vector<unsigned char> data, 
   std::unordered_map<unsigned char, Sensor>& sensors
 ) {
   // Get the sensor ids and current timestamp
   size_t sensor_count = data[0];
-  if (sensor_count != sensors.size())
-    throw std::runtime_error("Encoded data and sensor count size mismatch.");
-  unsigned int timestamp = data[1] + (data[2] << 8) + (data[3] << 16) + (data[4] << 24);
+  unsigned int timestamp = *(unsigned int *)(&data[1]);
   unsigned char sensor_ids[sensor_count];
   for (int i = 5; i < sensor_count + 5; i++) {
     sensor_ids[i - 5] = data[i];

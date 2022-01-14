@@ -3,10 +3,16 @@ Copyright Schulich Racing, FSAE
 Written by Justin Tijunelis
 */ 
 
-#pragma once
+#ifndef SENSOR_H
+#define SENSOR_H
+
 #include <string>
 #include <variant>
 #include <exception>
+#include <json.hpp>
+#include <set>
+
+using json = nlohmann::json;
 
 /**
  * @brief This represents all the possible data types our system
@@ -17,7 +23,8 @@ Written by Justin Tijunelis
 using SensorDataVariant = std::variant<long long, double, float, int, short, char, bool>;
 
 /**
- * @brief A tuple (sensor ID, SensorVariantData)
+ * @brief A tuple (sensor ID, SensorVariantData). 
+ * TODO: We should just make this a pair.
  */
 using SensorVariantPair = std::tuple<unsigned char, SensorDataVariant>;
 
@@ -35,11 +42,6 @@ enum class SensorType : char {
   BOOL = '?'
 };
 
-struct SensorRange {
-  double lower;
-  double upper;
-};
-
 /**
  * @brief Effectively a struct. Represents sensors on a "Thing"; used to create channels to 
  * read data from. These sensors are stored on a remote database and are fetched when a 
@@ -48,58 +50,32 @@ struct SensorRange {
 class Sensor {
 public:
   /**
-   * @brief Name of the sensor (e.g. Potentiometer)
+   * @brief A JSON object containing sensor information. JSON is used as the sensor
+   * fields are subject to change.
+   * Currently, the json has the following format:
+   * traits: {
+   *    name: string, (A unique name of the sensor)
+   *    id: unsigned char, (A unique identifier for the sensor, used for compression when sending data)
+   *    type: char, (An character used to specify what type of data the sensor outputs; used to decode data appropriately)
+   *    last_update: unsigned long int, (A timestamp specifying the last time this sensor was fetched from the database, used to figure out which sensors to fetch data for)
+   *    frequency: unsigned char, (The frequency that the sensor sends updated data at)
+   *    channel_id: unsigned int, (The channel id through which the sensor data is sent, used to determine how the data is read for hardware, for CAN, used as a CAN ID)
+   *    u_calib: double, (The upper calibration level for the sensor)
+   *    l_calib: double, (The lower calibration level for the sensor)
+   *    u_bound: double, (The max data value the sensor can have)
+   *    l_bound: double, (The min data value the sensor can have)
+   * }
    */
-  std::string name;
+  json traits;
 
-  /**
-   * @brief The sensor id used to encode/decode data. Limited to 255 to keep data for
-   * low sensor count "Things" small. This software is not expected to be used with 
-   * "Things" that have more than 255 sensors. 
-   */
-  unsigned char id;
-
-  /**
-   * @brief An enumeration representing the sensor's data type.
-   */
-  SensorType sensor_type;
-
-  /**
-   * @brief Used to determine whether the sensor has been updated more recently
-   * against the database. 
-   */
-  unsigned long int last_update;
-
-  /**
-   * @brief The update frequency of the sensor in Hz. Must be between 1-255, the 
-   * system performs best when all sensor frequencies are divisible by each other. 
-   */
-  unsigned char frequency;
-
-  /**
-   * @brief A channel ID that is used when created a "channel" for a piece of hardware. 
-   * Real-world channel examples include CAN, SPI, GPIO, I2C, UART, etc. 
-   */
-  unsigned int channel_id; 
-
-  /**
-   * @brief Some sensors output raw voltages, but are not calibrated (e.g. A sensor that
-   * is expected to output 0-5V actually outputs 0.2-4.8V). This value is used to scale
-   * values to normalize into their appropriate range. 
-   */
-  SensorRange calibration;
-
-  /**
-   * @brief Upper and lower most sensor values. Must fit within the sensor's type. 
-   */
-  SensorRange bounds;
-
-  Sensor() {}
-  Sensor(const char *n, unsigned char i, char t, unsigned long int lu, unsigned char f, unsigned int ci, SensorRange c, SensorRange b) 
-    : name(n), id(i), sensor_type((SensorType)t), last_update(lu), frequency(f), channel_id(ci), calibration(c), bounds(b) {}
+  Sensor(){};
+  Sensor(json t) : traits(t) {}
+  Sensor(std::vector<std::string> keys, std::vector<std::string> values);
 
   /**
    * @brief Returns a variant that can be used to deduce the sensor's data type.
    */
   SensorDataVariant get_variant() const;
 };
+
+#endif

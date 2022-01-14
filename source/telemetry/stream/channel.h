@@ -3,8 +3,10 @@ Copyright Schulich Racing, FSAE
 Written by Justin Tijunelis
 */ 
 
-#pragma once
-#include "../thing/sensor.h"
+#ifndef CHANNEL_H
+#define CHANNEL_H
+
+#include <telemetry/thing/sensor.h>
 #include <optional>
 #include <mutex>
 #include <ctime>
@@ -74,6 +76,8 @@ public:
 };
 
 // Must define inside the header, otherwise Stream cannot resolve specializations
+// TODO: Update CMake to resolve linking errors
+
 template <typename T> requires (std::is_arithmetic<T>::value)
 void Channel<T>::send(T v) {
   if (!_closed) {
@@ -115,3 +119,5 @@ T Channel<T>::_generate_random() {
       return _value;
   }
 }
+
+#endif

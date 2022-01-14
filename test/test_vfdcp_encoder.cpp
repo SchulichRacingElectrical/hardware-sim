@@ -18,13 +18,14 @@ public:
 
 protected:
   static void SetUpTestSuite() {
-    sensor_map[0] = Sensor("A", 0, 'q', 100, 2, 1, {-100, 100}, {-100, 100});
-    sensor_map[1] = Sensor("B", 1, 'd', 100, 3, 2, {-100, 100}, {-100, 100});
-    sensor_map[2] = Sensor("C", 2, 'f', 100, 1, 3, {-100, 100}, {-100, 100});
-    sensor_map[3] = Sensor("D", 3, 'i', 100, 4, 4, {-100, 100}, {-100, 100});
-    sensor_map[4] = Sensor("E", 4, 'h', 100, 2, 5, {-100, 100}, {-100, 100});
-    sensor_map[5] = Sensor("F", 5, 'c', 100, 3, 6, {-100, 100}, {-100, 100});
-    sensor_map[6] = Sensor("G", 6, '?', 100, 1, 7, {0, 1}, {0, 1});
+    // TODO: Use JSON
+    // sensor_map[0] = Sensor("A", 0, 'q', 100, 2, 1, {-100, 100}, {-100, 100});
+    // sensor_map[1] = Sensor("B", 1, 'd', 100, 3, 2, {-100, 100}, {-100, 100});
+    // sensor_map[2] = Sensor("C", 2, 'f', 100, 1, 3, {-100, 100}, {-100, 100});
+    // sensor_map[3] = Sensor("D", 3, 'i', 100, 4, 4, {-100, 100}, {-100, 100});
+    // sensor_map[4] = Sensor("E", 4, 'h', 100, 2, 5, {-100, 100}, {-100, 100});
+    // sensor_map[5] = Sensor("F", 5, 'c', 100, 3, 6, {-100, 100}, {-100, 100});
+    // sensor_map[6] = Sensor("G", 6, '?', 100, 1, 7, {0, 1}, {0, 1});
   }
 
   static void TearDownTestSuite() {

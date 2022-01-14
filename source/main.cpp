@@ -8,6 +8,7 @@ Written by Justin Tijunelis
 #include <telemetry/thing/telemetry_thing.h>
 #include <vector>
 #include <limits>
+#include <filesystem>
 #ifdef _WIN32
 #include <Windows.h>
 #else
@@ -22,6 +23,9 @@ void print_instructions() {
 }
 
 int main() {
+  // Create the storage folder if it does not exist
+  std::filesystem::create_directory("storage");
+  
   std::cout << "Welcome to the Schulich Racing Telemetry Simulator!" << std::endl;
   std::cout << "Here are a couple of things you need to know:" << std::endl;
   std::cout << "- This program is in alpha! It has not been thoroughly tested. The program is using various 'hacks'" << std::endl;

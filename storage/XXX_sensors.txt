@@ -1,0 +1,1 @@
+channel_id,frequency,id,l_bound,l_calib,last_update,name,type,u_bound,u_calib

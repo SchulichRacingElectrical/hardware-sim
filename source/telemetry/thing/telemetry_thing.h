@@ -3,21 +3,25 @@ Copyright Schulich Racing, FSAE
 Written by Justin Tijunelis
 */ 
 
-#pragma once
+#ifndef TELEMETRY_THING_H
+#define TELEMETRY_THING_H
+
 #include "sensor.h"
-#include "../stream/stream.h"
-#include "../transceiver/transceiver.h"
-#include "../encoder/vfdcp_encoder.h"
+#include <telemetry/transceiver/transceiver.h>
+#include <telemetry/encoder/vfdcp_encoder.h>
+#include <telemetry/stream/stream.h>
+#include <unordered_map>
+#include <functional>
 #include <string>
 #include <vector>
 #include <memory>
 #include <thread>
-#include <functional>
-#include <unordered_map>
+#include <ctime>
 
 class TelemetryThing {
   private:
     std::string _name;
+    std::time_t _session_start_time;
     std::string _serial_number;
     std::unique_ptr<Stream> _data_stream;
     std::unique_ptr<Transceiver> _transceiver;
@@ -28,6 +32,11 @@ class TelemetryThing {
      * locally stored sensors on change. Called on construction. 
      */
     void _populate_sensors();
+
+    /**
+     * @brief Function for logging what data is being sent and what it contains.
+     */
+    void _log_transmission(std::vector<unsigned char> bytes);
 
   public:
     TelemetryThing(std::string n, std::string sn);
@@ -44,19 +53,9 @@ class TelemetryThing {
     void stop_telemetry();
 
     /**
-     * @brief Pauses the telemetry session if it is running. This will stop the session 
-     * on the server as the server session acts through a timeout. 
-     */
-    void pause_telemetry();
-
-    /**
-     * @brief Unpauses the telemetry session if it is paused. Does nothing if there is no
-     * active session. This will start a new server session. 
-     */
-    void unpause_telemetry();
-
-    /**
      * @brief Temporary friend that allows the CLI to display information about the Thing.
      */
     friend int main();
 };
+
+#endif
