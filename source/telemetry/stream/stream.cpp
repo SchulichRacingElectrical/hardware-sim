@@ -132,6 +132,7 @@ void Stream::close() noexcept {
     {
       std::lock_guard<std::mutex> safe_lock(_lock);
       _closed = true;
+      _timestamp = 0;
     }
     _read_thread.join();
   }

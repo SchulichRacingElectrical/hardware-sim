@@ -138,7 +138,7 @@ std::string ThingWriter::write_sensor_data(
       }
     }
     data_row.pop_back();
-    out_file << data_row;
+    out_file << data_row << std::endl;
     out_file.close();
   } else {
     // Write to the last line of the file, populate missing columns with previous values
