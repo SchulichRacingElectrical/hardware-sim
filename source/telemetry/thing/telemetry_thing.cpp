@@ -13,6 +13,7 @@ TelemetryThing::TelemetryThing(std::string n, std::string sn) : _name(n), _seria
 }
 
 TelemetryThing::~TelemetryThing() {
+  _transceiver.reset();
   stop_telemetry();
 }
 
@@ -45,8 +46,7 @@ void TelemetryThing::stop_telemetry() {
     _transceiver->stop_session();
     unsigned int id = std::hash<std::thread::id>()(std::this_thread::get_id());
     _data_stream->unsubscribe(id);
-    _data_stream->close();
-    _data_stream = nullptr;
+    _data_stream.reset();
     _last_line = "";
   }
 }

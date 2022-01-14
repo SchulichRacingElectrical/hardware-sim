@@ -27,6 +27,7 @@ Stream::Stream(std::vector<Sensor>& sensors) {
 }
 
 Stream::~Stream() {
+  close();
   for (auto it = _channels.begin(); it != _channels.end(); it++) {
     if (it->second != nullptr) {
       delete it->second;
