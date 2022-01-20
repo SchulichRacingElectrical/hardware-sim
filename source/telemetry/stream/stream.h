@@ -9,14 +9,15 @@ Written by Justin Tijunelis
 #include "channel.h"
 #include <telemetry/thing/sensor.h>
 #include <unordered_map>
+#include <unordered_set>
+#include <functional>
 #include <memory>
 #include <vector>
-#include <mutex>
-#include <functional>
+#include <future>
 #include <chrono>
 #include <thread>
 #include <limits>
-#include <unordered_set>
+#include <mutex>
 
 /**
  * @brief Data publication callback; used to receive variable frequency
@@ -85,14 +86,14 @@ public:
    * Returns false if the given id already has a subscriber. 
    * Returns true if the callback is bound successfully. 
    */
-  bool subscribe(unsigned int id, ReadCallback callback) noexcept;
+  bool subscribe(const unsigned int& id, ReadCallback callback) noexcept;
 
   /**
    * @brief Unsubscribe the callback associated with the provided ID.
    * Returns false if the provided id does not match with a callback. 
    * Returns true if the provided id's callback was unbound.
    */
-  bool unsubscribe(unsigned int id) noexcept;
+  bool unsubscribe(const unsigned int& id) noexcept;
 
   /**
    * @brief Opens the stream to start reading from channel. 

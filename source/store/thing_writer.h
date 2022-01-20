@@ -32,7 +32,7 @@ class ThingWriter {
      */
     static void write_sensors(
       const std::vector<Sensor>& sensors, 
-      const std::string serial_number
+      const std::string& serial_number
     );
 
     /**
@@ -54,7 +54,7 @@ class ThingWriter {
      * will return a string with all the keys separated by commas. Keys false will return a string 
      * with all the values separated by commas. 
      */
-    static std::string create_sensor_row(const json& traits, bool keys = false);
+    static std::string create_sensor_row(const json& traits, bool&& keys = false);
 };
 
 // Must define functions in header or we will get a linking error
@@ -62,7 +62,7 @@ class ThingWriter {
 
 void ThingWriter::write_sensors(
   const std::vector<Sensor>& sensors, 
-  const std::string serial_number
+  const std::string& serial_number
 ) {
   if (sensors.size() > 0) {
     // Delete the existing file
@@ -85,7 +85,7 @@ void ThingWriter::write_sensors(
 }
 
 std::string ThingWriter::write_sensor_data(
-  const std::vector<Sensor> &sensors,
+  const std::vector<Sensor>& sensors,
   const std::vector<SensorVariantPair>& data,
   const unsigned int& timestamp,
   const std::string& last_line,
@@ -163,7 +163,7 @@ std::string ThingWriter::write_sensor_data(
   return data_row;
 }
 
-std::string ThingWriter::create_sensor_row(const json& traits, bool keys) {
+std::string ThingWriter::create_sensor_row(const json& traits, bool&& keys) {
   std::string row;
   for (const auto& element : traits.items()) {
     if (keys) {

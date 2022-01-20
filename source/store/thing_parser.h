@@ -78,7 +78,7 @@ std::vector<Sensor> ThingParser::read_sensors(
   std::vector<std::string> columnNames = ThingParser::parse_row(first_row);
   for (std::string row; std::getline(in_file, row);) {
     std::vector<std::string> sensor_values = ThingParser::parse_row(row);
-    sensors.push_back(Sensor(columnNames, sensor_values));
+    sensors.push_back(Sensor(columnNames, sensor_values)); // TODO: Move data into sensor rather than copy
   }
 
   in_file.close();

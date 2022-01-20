@@ -7,6 +7,7 @@ Written by Justin Tijunelis
 #include <iostream>
 
 // There must be a better way to do this...
+// Minor optimization is to move vectors rather than copy them
 Sensor::Sensor(std::vector<std::string> keys, std::vector<std::string> values) {
   json data{};
   std::set<std::string> doubles{"u_calib", "l_calib", "u_bound", "l_bound"};

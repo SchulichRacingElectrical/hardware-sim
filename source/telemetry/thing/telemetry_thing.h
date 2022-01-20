@@ -19,7 +19,9 @@ Written by Justin Tijunelis
 #include <ctime>
 
 /**
- * @brief 
+ * @brief A telemetry "thing" is an object that contains a set of sensors that write
+ * data through a stream. The thing is responsible for mediating data between the 
+ * stream, file store, and data transceiver. 
  */
 class TelemetryThing {
   private:
@@ -43,6 +45,7 @@ class TelemetryThing {
     void _log_transmission(std::vector<unsigned char> bytes);
 
   public:
+    // TODO: Add rvalue and move constructors, avoid copying strings. 
     TelemetryThing(std::string n, std::string sn);
     ~TelemetryThing();
 

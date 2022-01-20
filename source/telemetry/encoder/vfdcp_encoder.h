@@ -26,7 +26,7 @@ class VFDCPEncoder {
     VFDCPEncoder(const VFDCPEncoder&) = delete;
     VFDCPEncoder &operator=(const VFDCPEncoder&) = delete;
 
-    static VFDCPEncoder &get() {
+    static VFDCPEncoder& get() {
       static VFDCPEncoder instance;
       return instance;
     }
@@ -43,7 +43,7 @@ class VFDCPEncoder {
      * timestamp and all of the data. 
      */
     std::tuple<unsigned int, std::vector<SensorVariantPair>> decode_data(
-      std::vector<unsigned char> data, 
+      std::vector<unsigned char>& data, 
       std::unordered_map<unsigned char, Sensor>& sensors
     );
 };

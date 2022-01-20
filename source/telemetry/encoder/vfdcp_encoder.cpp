@@ -6,7 +6,7 @@ Written by Justin Tijunelis
 #include "vfdcp_encoder.h"
 
 std::vector<unsigned char> VFDCPEncoder::encode_data(
-  unsigned int timestamp, 
+  unsigned int timestamp, // Can this be changed to const ref?
   std::vector<SensorVariantPair>& data
 ) {
   // Sort the variants from largest to smallest with respect to bytes.
@@ -67,7 +67,7 @@ std::vector<unsigned char> VFDCPEncoder::encode_data(
 }
 
 std::tuple<unsigned int, std::vector<SensorVariantPair>> VFDCPEncoder::decode_data(
-  std::vector<unsigned char> data, 
+  std::vector<unsigned char>& data, 
   std::unordered_map<unsigned char, Sensor>& sensors
 ) {
   // Get the sensor ids and current timestamp
@@ -83,19 +83,19 @@ std::tuple<unsigned int, std::vector<SensorVariantPair>> VFDCPEncoder::decode_da
   std::vector<SensorVariantPair> decoded{};
   for (const unsigned char& sensor_id: sensor_ids) {
     auto variant = sensors[sensor_id].get_variant();
-      std::visit(
-        [&](auto v) {
-          size_t size = sizeof(v);
-          unsigned char decoded_bytes[size];
-          for (size_t i = 0; i < size; i++) {
-            decoded_bytes[i] = data[index];
-            index++;
-          }
-          decltype(v) final_value = *reinterpret_cast<decltype(v)*>(&decoded_bytes);
-          decoded.emplace_back(sensor_id, final_value);
-        }, 
-        variant
-      );
+    std::visit(
+      [&](auto v) {
+        size_t size = sizeof(v);
+        unsigned char decoded_bytes[size];
+        for (size_t i = 0; i < size; i++) {
+          decoded_bytes[i] = data[index];
+          index++;
+        }
+        decltype(v) final_value = *reinterpret_cast<decltype(v)*>(&decoded_bytes);
+        decoded.emplace_back(sensor_id, final_value);
+      }, 
+      variant
+    );
   }
 
   return { timestamp, decoded };

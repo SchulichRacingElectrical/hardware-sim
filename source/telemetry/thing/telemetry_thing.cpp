@@ -7,7 +7,7 @@ Written by Justin Tijunelis
 #include <store/thing_parser.h>
 #include <store/thing_writer.h>
 
-TelemetryThing::TelemetryThing(std::string n, std::string sn) : _name(n), _serial_number(sn) {
+TelemetryThing::TelemetryThing(std::string n, std::string sn): _name(n), _serial_number(sn) {
   _transceiver = std::make_unique<Transceiver>(_serial_number);
   _populate_sensors();
 }
@@ -25,12 +25,17 @@ void TelemetryThing::start_telemetry() {
       _data_stream = std::make_unique<Stream>(_sensors);
       unsigned int id = std::hash<std::thread::id>()(std::this_thread::get_id());
       auto callback = [&](unsigned int timestamp, std::vector<SensorVariantPair> data) {
+        // Lock with mutex?
         std::vector<unsigned char> bytes = VFDCPEncoder::get().encode_data(timestamp, data);
-        _transceiver->send_vfdcp_data(bytes);
+
+        // Write data to file
         std::string path = "./storage/" + _serial_number + "_" + std::ctime(&_session_start_time) + "_data.txt";
         _last_line = ThingWriter::write_sensor_data(_sensors, data, timestamp, _last_line, path);
 
-        // TEMPORARY
+        // Send data to server
+        _transceiver->send_vfdcp_data(bytes);
+
+        // TEMPORARY - Log data 
         _log_transmission(bytes);
       };
       _data_stream->subscribe(id, callback);

@@ -88,7 +88,9 @@ void Stream::_tap_channels() noexcept {
         // Notify the subscribers of new data; TODO: Call this async
         if (data.size() != 0) {
           for (auto it = _callbacks.begin(); it != _callbacks.end(); it++) {
-            it->second(_timestamp, data);
+            std::future<void> f = std::async(std::launch::async, [=](){
+              it->second(_timestamp, data);
+            });
           }
           change_set.clear();
         }
@@ -99,7 +101,7 @@ void Stream::_tap_channels() noexcept {
   }
 }
 
-bool Stream::subscribe(unsigned int id, ReadCallback callback) noexcept {
+bool Stream::subscribe(const unsigned int& id, ReadCallback callback) noexcept {
   std::lock_guard<std::mutex> safe_lock(_lock);
   if (_callbacks.find(id) == _callbacks.end()) {
     _callbacks[id] = callback;
@@ -109,7 +111,7 @@ bool Stream::subscribe(unsigned int id, ReadCallback callback) noexcept {
   }
 }
 
-bool Stream::unsubscribe(unsigned int id) noexcept {
+bool Stream::unsubscribe(const unsigned int& id) noexcept {
   std::lock_guard<std::mutex> safe_lock(_lock);
   if (_callbacks.find(id) == _callbacks.end()) {
     return false;

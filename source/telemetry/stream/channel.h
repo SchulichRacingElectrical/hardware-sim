@@ -18,7 +18,7 @@ Written by Justin Tijunelis
 class AbstractChannel {
   public:
     Sensor sensor;
-    AbstractChannel(Sensor s) : sensor(s) {}
+    AbstractChannel(Sensor s): sensor(s) {}
     virtual ~AbstractChannel() {}
     virtual void open() = 0;
     virtual void close() = 0;
@@ -46,9 +46,9 @@ public:
   Channel<T>() = delete;
   template <class Sensor> 
   Channel<T>(Sensor& s) : AbstractChannel(s) {}
-  Channel<T>(const Channel<T> &) = delete;
-  Channel<T>(const Channel<T> &&) = delete;
-  Channel<T> &operator=(const Channel &) = delete;
+  Channel<T>(const Channel<T>&) = delete;
+  Channel<T>(const Channel<T>&&) = delete;
+  Channel<T> &operator=(const Channel&) = delete;
 
   /**
    * @brief Opens the channel, a stream is able to request and read values. 
@@ -71,8 +71,9 @@ public:
    * and sends the most recent data. The timestamp is passed as a parameter to
    * read from the correct timestamp of a file. Time stamps are stored at the 
    * highest frequency of all sensors, (i.e. 10Hz means timestamps are multiples of 100).
+   * Timestamp may need to passed by copy in the future if this function is called async.
    */
-  std::optional<T> read(unsigned int timestamp);
+  std::optional<T> read(const volatile unsigned int& timestamp);
 };
 
 // Must define inside the header, otherwise Stream cannot resolve specializations
@@ -87,7 +88,7 @@ void Channel<T>::send(T v) {
 }
 
 template<typename T> requires (std::is_arithmetic<T>::value)
-std::optional<T> Channel<T>::read(unsigned int timestamp) {
+std::optional<T> Channel<T>::read(const volatile unsigned int& timestamp) {
   if (_closed) return std::nullopt;
   std::lock_guard<std::mutex> safe_lock(_lock);
   _value = _generate_random();
