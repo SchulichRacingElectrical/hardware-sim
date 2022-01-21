@@ -6,11 +6,11 @@ Written by Justin Tijunelis
 #ifndef SENSOR_H
 #define SENSOR_H
 
+#include <set>
 #include <string>
 #include <variant>
-#include <exception>
 #include <json.hpp>
-#include <set>
+#include <exception>
 
 using json = nlohmann::json;
 
@@ -68,8 +68,8 @@ public:
    */
   json traits;
 
-  Sensor(){};
-  Sensor(json t) : traits(t) {}
+  Sensor() {};
+  Sensor(json t): traits(t) {}
   Sensor(std::vector<std::string> keys, std::vector<std::string> values);
 
   /**

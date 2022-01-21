@@ -31,6 +31,11 @@
 },
 {
   "directory": "/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/source",
+  "command": "/usr/bin/clang++  -I/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/source -I/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/inc -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk -mmacosx-version-min=12.0 -std=gnu++2a -o CMakeFiles/TelemetrySim_run.dir/ui/session_interface.cpp.o -c /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/source/ui/session_interface.cpp",
+  "file": "/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/source/ui/session_interface.cpp"
+},
+{
+  "directory": "/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/source",
   "command": "/usr/bin/clang++  -I/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/source -I/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/inc -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk -mmacosx-version-min=12.0 -std=gnu++2a -o CMakeFiles/TelemetrySim_lib.dir/main.cpp.o -c /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/source/main.cpp",
   "file": "/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/source/main.cpp"
 },
@@ -58,6 +63,11 @@
   "directory": "/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/source",
   "command": "/usr/bin/clang++  -I/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/source -I/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/inc -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk -mmacosx-version-min=12.0 -std=gnu++2a -o CMakeFiles/TelemetrySim_lib.dir/telemetry/transceiver/transceiver.cpp.o -c /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/source/telemetry/transceiver/transceiver.cpp",
   "file": "/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/source/telemetry/transceiver/transceiver.cpp"
+},
+{
+  "directory": "/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/source",
+  "command": "/usr/bin/clang++  -I/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/source -I/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/inc -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.1.sdk -mmacosx-version-min=12.0 -std=gnu++2a -o CMakeFiles/TelemetrySim_lib.dir/ui/session_interface.cpp.o -c /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/source/ui/session_interface.cpp",
+  "file": "/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/source/ui/session_interface.cpp"
 },
 {
   "directory": "/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/test",
