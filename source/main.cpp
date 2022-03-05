@@ -1,7 +1,7 @@
-/* 
+/*
 Copyright Schulich Racing, FSAE
 Written by Justin Tijunelis
-*/ 
+*/
 
 #include <iostream>
 #include <ostream>
@@ -9,24 +9,27 @@ Written by Justin Tijunelis
 #include <vector>
 #include <limits>
 #include <filesystem>
+
 #ifdef _WIN32
 #include <Windows.h>
 #else
 #include <unistd.h>
 #endif
 
-void print_instructions() {
+void print_instructions()
+{
   std::cout << "Enter 'thing' to a create a new object that will stream telemetry." << std::endl;
   std::cout << "Enter 'view' to see which 'things' currently exist." << std::endl;
   std::cout << "Enter 'start' to begin telemetry for your 'things'." << std::endl;
   std::cout << "Enter 'q' to quit the program at any time." << std::endl;
 }
 
-int main() {
+int main()
+{
   // Create the storage folder if it does not exist
   std::filesystem::create_directory("storage");
-  
-  std::cout << "Welcome to the Schulich Racing Telemetry Simulator!" << std::endl;
+
+  std::cout << "Welcome to the Schulich Racing Telemetry Simulator by Justin and Abod!" << std::endl;
   std::cout << "Here are a couple of things you need to know:" << std::endl;
   std::cout << "- This program is in alpha! It has not been thoroughly tested. The program is using various 'hacks'" << std::endl;
   std::cout << "that provide a presentable output that will help you understand what this program does." << std::endl;
@@ -38,7 +41,8 @@ int main() {
 
   std::vector<std::unique_ptr<TelemetryThing>> things;
   bool quit = false;
-  while (!quit) {
+  while (!quit)
+  {
     print_instructions();
     std::string line;
     std::getline(std::cin, line);
@@ -46,84 +50,120 @@ int main() {
     {
       std::cout << "What is the name of your thing? Enter 'e' to exit, or 'q' to quit." << std::endl;
       std::string thing_name;
-      while (1) {
+      while (1)
+      {
         std::getline(std::cin, thing_name);
-        if (thing_name != "q" && thing_name != "e") {
+        if (thing_name != "q" && thing_name != "e")
+        {
           // Check if already exists
           bool exists = false;
-          for (auto& thing: things) {
-            if (thing->_name == thing_name) {
+          for (auto &thing : things)
+          {
+            if (thing->_name == thing_name)
+            {
               exists = true;
             }
           }
-          if (exists) {
+          if (exists)
+          {
             std::cout << "There is already a thing with this name! Please try again." << std::endl;
-          } else {
+          }
+          else
+          {
             std::cout << "Great! What is the serial number of " << thing_name << "? Enter 'e' to exit, or 'q' to quit." << std::endl;
             std::string thing_sin;
-            while (1) {
+            while (1)
+            {
               std::getline(std::cin, thing_sin);
-              if (thing_sin != "q" && thing_sin != "e") {
+              if (thing_sin != "q" && thing_sin != "e")
+              {
                 // Check if already exists
                 bool exists = false;
-                for (auto& thing: things) {
-                  if (thing->_serial_number == thing_sin) {
+                for (auto &thing : things)
+                {
+                  if (thing->_serial_number == thing_sin)
+                  {
                     exists = true;
                   }
                 }
-                if (exists) {
+                if (exists)
+                {
                   std::cout << "A thing with this serial number already exists! Please try again." << std::endl;
-                } else {
+                }
+                else
+                {
                   things.push_back(std::make_unique<TelemetryThing>(thing_name, thing_sin));
                   std::cout << "Fantastic! You created " << thing_name << " with serial number " << thing_sin << "." << std::endl;
                   break;
                 }
-              } else {
-                if (thing_sin == "q") quit = true;
+              }
+              else
+              {
+                if (thing_sin == "q")
+                  quit = true;
                 break;
               }
             }
             break;
           }
-        } else {
-          if (thing_name == "q") quit = true;
+        }
+        else
+        {
+          if (thing_name == "q")
+            quit = true;
           break;
         }
       }
     }
     else if (line == "view")
     {
-      if (things.size() == 0) {
+      if (things.size() == 0)
+      {
         std::cout << "You don't have any things yet!" << std::endl;
-      } else {
-        std::cout << std::endl << "Here are your things:" << std::endl;
+      }
+      else
+      {
+        std::cout << std::endl
+                  << "Here are your things:" << std::endl;
         std::cout << "----------------------" << std::endl;
-        for (auto it = things.begin(); it != things.end(); it++) {
-          std::cout << "Name: " << (*it)->_name << "; " << "Serial Number: " << (*it)->_serial_number << std::endl;
+        for (auto it = things.begin(); it != things.end(); it++)
+        {
+          std::cout << "Name: " << (*it)->_name << "; "
+                    << "Serial Number: " << (*it)->_serial_number << std::endl;
         }
         std::cout << "----------------------" << std::endl;
         std::cout << "If you want to delete a thing, enter it's name. Enter 'e' to exit this view, or 'q' to quit the program." << std::endl;
-        while (1) {
+        while (1)
+        {
           std::string input;
           std::getline(std::cin, input);
-          if (input != "q" && input != "e") {
+          if (input != "q" && input != "e")
+          {
             int index = -1;
-            for (int i = 0; i < things.size(); i++) {
-              if (things[i]->_name == input) {
+            for (int i = 0; i < things.size(); i++)
+            {
+              if (things[i]->_name == input)
+              {
                 index = i;
                 things[i].reset();
                 break;
               }
             }
-            if (index != -1) {
+            if (index != -1)
+            {
               things.erase(things.begin() + index);
               std::cout << "Thing " << input << " was removed!" << std::endl;
               break;
-            } else {
+            }
+            else
+            {
               std::cout << "Oops, the program couldn't find your thing. Please try again. Enter 'e' to exit this view, or 'q' to quit the program." << std::endl;
             }
-          } else {
-            if (input == "q") quit = true;
+          }
+          else
+          {
+            if (input == "q")
+              quit = true;
             break;
           }
         }
@@ -131,21 +171,28 @@ int main() {
     }
     else if (line == "start")
     {
-      if (things.size() == 0) {
+      if (things.size() == 0)
+      {
         std::cout << "You haven't made any things yet!" << std::endl;
-      } else {
+      }
+      else
+      {
         std::cout << "Starting the telemetry session! Note that the console will get overflown." << std::endl;
         std::cout << "Note that multiple thing logs will collide as they run async." << std::endl;
         std::cout << "Enter 'stop' at any time to stop the stream." << std::endl;
-        sleep(3);
-        for (auto& thing: things) {
+        // sleep(3);
+        for (auto &thing : things)
+        {
           thing->start_telemetry();
         }
         std::string input;
-        while (1) {
+        while (1)
+        {
           std::getline(std::cin, input);
-          if (input == "stop") {
-            for (auto& thing: things) {
+          if (input == "stop")
+          {
+            for (auto &thing : things)
+            {
               thing->stop_telemetry();
             }
             break;

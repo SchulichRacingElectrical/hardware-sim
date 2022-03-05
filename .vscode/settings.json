@@ -84,5 +84,6 @@
     "vector": "cpp",
     "__memory": "cpp",
     "filesystem": "cpp"
-  }
+  },
+  "cmake.configureOnOpen": true
 }

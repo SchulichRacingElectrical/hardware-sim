@@ -1,7 +1,7 @@
-/* 
+/*
 Copyright Schulich Racing, FSAE
 Written by Justin Tijunelis
-*/ 
+*/
 
 #ifndef TELEMETRY_THING_H
 #define TELEMETRY_THING_H
@@ -20,49 +20,50 @@ Written by Justin Tijunelis
 
 /**
  * @brief A telemetry "thing" is an object that contains a set of sensors that write
- * data through a stream. The thing is responsible for mediating data between the 
- * stream, file store, and data transceiver. 
+ * data through a stream. The thing is responsible for mediating data between the
+ * stream, file store, and data transceiver.
  */
-class TelemetryThing {
-  private:
-    std::string _name;
-    std::time_t _session_start_time;
-    std::string _serial_number;
-    std::unique_ptr<Stream> _data_stream;
-    std::unique_ptr<Transceiver> _transceiver;
-    std::vector<Sensor> _sensors;
-    std::string _last_line; // Temporary for storing last line of file when writing
+class TelemetryThing
+{
+private:
+  std::string _name;
+  std::time_t _session_start_time;
+  std::string _serial_number;
+  std::unique_ptr<Stream> _data_stream;
+  std::unique_ptr<Transceiver> _transceiver;
+  std::vector<Sensor> _sensors;
+  std::string _last_line; // Temporary for storing last line of file when writing
 
-    /**
-     * @brief Reconciles locally stored sensors and those on the cloud, updates 
-     * locally stored sensors on change. Called on construction. 
-     */
-    void _populate_sensors();
+  /**
+   * @brief Reconciles locally stored sensors and those on the cloud, updates
+   * locally stored sensors on change. Called on construction.
+   */
+  void _populate_sensors();
 
-    /**
-     * @brief Function for logging what data is being sent and what it contains.
-     */
-    void _log_transmission(std::vector<unsigned char> bytes);
+  /**
+   * @brief Function for logging what data is being sent and what it contains.
+   */
+  void _log_transmission(std::vector<unsigned char> bytes);
 
-  public:
-    // TODO: Add rvalue and move constructors, avoid copying strings. 
-    TelemetryThing(std::string n, std::string sn);
-    ~TelemetryThing();
+public:
+  // TODO: Add rvalue and move constructors, avoid copying strings.
+  TelemetryThing(std::string n, std::string sn);
+  ~TelemetryThing();
 
-    /**
-     * @brief Starts the telemetry session. Does nothing if the session is already running.
-     */
-    void start_telemetry();
+  /**
+   * @brief Starts the telemetry session. Does nothing if the session is already running.
+   */
+  void start_telemetry();
 
-    /**
-     * @brief Stops the telemetry session completely. Destroys the data stream.
-     */
-    void stop_telemetry();
+  /**
+   * @brief Stops the telemetry session completely. Destroys the data stream.
+   */
+  void stop_telemetry();
 
-    /**
-     * @brief Temporary friend that allows the CLI to display information about the Thing.
-     */
-    friend int main();
+  /**
+   * @brief Temporary friend that allows the CLI to display information about the Thing.
+   */
+  friend int main();
 };
 
 #endif

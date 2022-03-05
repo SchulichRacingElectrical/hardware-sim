@@ -10,9 +10,15 @@ Written by Justin Tijunelis
 #include <vector>
 #include <unordered_map>
 #include <iostream>
-#include <sys/socket.h>
+// #include <sys/socket.h>
 #include <httplib.h>
 #include <json.hpp>
+
+#ifdef _WIN32
+#include "winsock2.h"
+#else
+#include <sys/socket.h>
+#endif
 
 using json = nlohmann::json;
 
