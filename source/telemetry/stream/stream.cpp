@@ -12,14 +12,14 @@ Stream::Stream(std::vector<Sensor>& sensors) {
       [&](auto v) {
         // Create a new channel
         AbstractChannel *channel = new Channel<decltype(v)>(*it);
-        _channels[it->traits["channel_id"]] = channel;
+        _channels[it->traits["channelId"]] = channel;
         if (_frequency < it->traits["frequency"]) {
           _frequency = it->traits["frequency"];
         }
 
         // Create the stream buffer entry for the channel
         decltype(v) variant_type = 0;
-        _stream_buffer[it->traits["channel_id"]] = variant_type;
+        _stream_buffer[it->traits["channelId"]] = variant_type;
       },
       it->get_variant()
     );

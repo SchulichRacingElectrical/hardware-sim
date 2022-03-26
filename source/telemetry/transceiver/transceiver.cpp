@@ -14,12 +14,18 @@ Transceiver::~Transceiver() {
 std::vector<Sensor> Transceiver::fetch_sensors() {
   std::vector<Sensor> sensors;
   #if TESTING == 0
+
+  // Add an API key to the request 
   // Actual request - TODO
   std::string endpoint = "/iot/" + _serial_number + "/sensors";
+  json sensor = {};
   if (auto res = _client.Get(std::move(endpoint.c_str()))) {
     // TODO: Parse sensors, realistically want to send bytes over json. 
+    if(res->body){
+      sensor = json::parse(res->body);
+    }
   } else {
-    // There was an error
+    continue;
   }
   #else
   // For testing purposes
@@ -82,8 +88,13 @@ std::unordered_map<unsigned char, Sensor> Transceiver::fetch_sensor_diff(unsigne
     std::string endpoint = "/iot/" + _serial_number + "/sensor_diff/" + std::to_string(lat_update);
     if (auto res = _client.Get(std::move(endpoint.c_str()))) {
       // TODO: Update the sensors
-    } else {
+      if (res->body){
+        sensor = json::parse(res->body);
+      }
+    }
+    else{
       // TODO: There was an error
+      continue;
     }
   #endif
   return temp;
@@ -94,7 +105,7 @@ bool Transceiver::request_session() {
     // TODO: Create a TCP socket and send the opened port to the server
     // so it knows where to send data. 
     std::string endpoint = "/iot/" + _serial_number + "/start";
-    auto res = _client.Get(std::move(endpoint.c_str()));
+    // auto res = _client.Get(std::move(endpoint.c_str()));
     if (auto res = _client.Get(std::move(endpoint.c_str()))) {
       json response = json::parse(res->body);
       _remote_udp_port = response["port"];
