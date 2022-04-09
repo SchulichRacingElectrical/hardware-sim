@@ -75,9 +75,9 @@ void TelemetryThing::_populate_sensors()
   unsigned long int most_recent_update = 0;
   for (const auto &sensor : _sensors)
   {
-    if (most_recent_update < sensor.traits["last_update"])
+    if (most_recent_update < sensor.traits["lastUpdate"])
     {
-      most_recent_update = sensor.traits["last_update"];
+      most_recent_update = sensor.traits["lastUpdate"];
     }
   }
 
@@ -93,10 +93,10 @@ void TelemetryThing::_populate_sensors()
     std::unordered_map<unsigned char, Sensor> sensor_diff = _transceiver->fetch_sensor_diff(most_recent_update);
     for (auto sensor : _sensors)
     {
-      if (sensor_diff.find(sensor.traits["id"]) != sensor_diff.end())
+      if (sensor_diff.find(sensor.traits["smallId"]) != sensor_diff.end())
       {
-        std::swap(sensor, sensor_diff[sensor.traits["id"]]);
-        sensor_diff.erase(sensor.traits["id"]);
+        std::swap(sensor, sensor_diff[sensor.traits["smallId"]]);
+        sensor_diff.erase(sensor.traits["smallId"]);
       }
     }
     for (auto new_sensor : sensor_diff)
@@ -123,7 +123,7 @@ void TelemetryThing::_log_transmission(std::vector<unsigned char> bytes)
   std::unordered_map<unsigned char, Sensor> sensor_map;
   for (auto sensor : _sensors)
   {
-    sensor_map[(unsigned char)sensor.traits["id"]] = sensor;
+    sensor_map[(unsigned char)sensor.traits["smallId"]] = sensor;
   }
   auto [ts, uncompressed] = VFDCPEncoder::get().decode_data(bytes, sensor_map);
   std::cout << "->Server received data from " << _name << " with timestamp ";

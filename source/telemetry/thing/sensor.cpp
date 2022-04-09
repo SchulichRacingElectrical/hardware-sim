@@ -10,15 +10,15 @@ Written by Justin Tijunelis
 // Minor optimization is to move vectors rather than copy them
 Sensor::Sensor(std::vector<std::string> keys, std::vector<std::string> values) {
   json data{};
-  std::set<std::string> doubles{"u_calib", "l_calib", "u_bound", "l_bound"};
+  std::set<std::string> doubles{"upperCalibration", "lowerCalibration", "upperBound", "lowerBound"};
   for (int i = 0; i < keys.size(); i++) {
     std::string key = keys[i];
     if (key == "name") data[key] = values[i];
-    else if (key == "id") data[key] = std::stoi(values[i]);
+    else if (key == "smallId") data[key] = std::stoi(values[i]);
     else if (key == "type") data[key] = (char)std::stoi(values[i]);
-    else if (key == "last_update") data[key] = std::stoul(values[i]);
+    else if (key == "lastUpdate") data[key] = std::stoul(values[i]);
     else if (key == "frequency") data[key] = (unsigned char)std::stoul(values[i]);
-    else if (key == "channel_id") data[key] = (unsigned int)std::stoul(values[i]);
+    else if (key == "channelId") data[key] = (unsigned int)std::stoul(values[i]);
     else if (doubles.find(key) != doubles.end()) data[key] = std::stod(values[i]);
   }
   traits = data;

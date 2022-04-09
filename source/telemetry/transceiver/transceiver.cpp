@@ -31,52 +31,52 @@ std::vector<Sensor> Transceiver::fetch_sensors() {
   // For testing purposes
   json sensor = {
     {"name", "A"},
-    {"id", 0},
+    {"smallId", 0},
     {"type", 'q'},
-    {"last_update", 1},
+    {"lastUpdate", 1},
     {"frequency", 2},
-    {"channel_id", 1},
-    {"u_calib", 100},
-    {"l_calib", -100},
-    {"u_bound", 100},
-    {"l_bound", -100}
+    {"channelId", 1},
+    {"upperCalibration", 100},
+    {"lowerCalibration", -100},
+    {"upperBound", 100},
+    {"lowerBound", -100}
   };
   sensors.push_back(Sensor(sensor));
   sensor["name"] = "B"; 
-  sensor["id"] = 1;
+  sensor["smallId"] = 1;
   sensor["type"] = 'd';
   sensor["frequency"] = 3;
-  sensor["channel_id"] = 2;
+  sensor["channelId"] = 2;
   sensors.push_back(Sensor(sensor));
   sensor["name"] = "C"; 
-  sensor["id"] = 2;
+  sensor["smallId"] = 2;
   sensor["type"] = 'f';
   sensor["frequency"] = 1;
-  sensor["channel_id"] = 3;
+  sensor["channelId"] = 3;
   sensors.push_back(Sensor(sensor));
   sensor["name"] = "D"; 
-  sensor["id"] = 3;
+  sensor["smallId"] = 3;
   sensor["type"] = 'i';
   sensor["frequency"] = 4;
-  sensor["channel_id"] = 4;
+  sensor["channelId"] = 4;
   sensors.push_back(Sensor(sensor));
   sensor["name"] = "E"; 
-  sensor["id"] = 4;
+  sensor["smallId"] = 4;
   sensor["type"] = 'h';
   sensor["frequency"] = 2;
-  sensor["channel_id"] = 5;
+  sensor["channelId"] = 5;
   sensors.push_back(Sensor(sensor));
   sensor["name"] = "F"; 
-  sensor["id"] = 5;
+  sensor["smallId"] = 5;
   sensor["type"] = 'c';
   sensor["frequency"] = 3;
-  sensor["channel_id"] = 6;
+  sensor["channelId"] = 6;
   sensors.push_back(Sensor(sensor));
   sensor["name"] = "G"; 
-  sensor["id"] = 6;
+  sensor["smallId"] = 6;
   sensor["type"] = '?';
   sensor["frequency"] = 1;
-  sensor["channel_id"] = 7;
+  sensor["channelId"] = 7;
   sensors.push_back(Sensor(sensor));
 #endif
   return sensors;

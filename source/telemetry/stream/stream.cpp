@@ -71,13 +71,13 @@ void Stream::_tap_channels() noexcept {
             [&](auto last_value) {
               Channel<decltype(last_value)> *channel = dynamic_cast<Channel<decltype(last_value)>*>(_channels[channel_id]);
               auto current_value = channel->read(_timestamp);
-              double upper_bound = channel->sensor.traits["u_bound"];
-              double lower_bound = channel->sensor.traits["l_bound"];
+              double upper_bound = channel->sensor.traits["upperBound"];
+              double lower_bound = channel->sensor.traits["lowerBound"];
               int epsilon = (upper_bound - lower_bound) * 0.005f;
               if (current_value.has_value()) {
                 if (abs(*current_value - last_value) > epsilon) {
-                  _stream_buffer[channel->sensor.traits["channel_id"]] = *current_value;
-                  data.push_back({channel->sensor.traits["id"], *current_value});
+                  _stream_buffer[channel->sensor.traits["channelId"]] = *current_value;
+                  data.push_back({channel->sensor.traits["channelId"], *current_value});
                 }
               }
             }, 
