@@ -11,15 +11,15 @@ Transceiver::~Transceiver() {
 
 std::optional<std::vector<Sensor>> Transceiver::fetch_sensors() {
   std::vector<Sensor> sensors;
-  std::string endpoint = "/iot/" + _serial_number + "/sensors";
-  httplib::Headers headers = {{"apiKey", _api_key}};
+  std::string endpoint = "/api/database/sensors/thing/" + _serial_number;
   httplib::Client client(this->_web_address);
+  client.set_read_timeout(100000);
+  httplib::Headers headers = {{"apiKey", _api_key}};
   if (auto res = client.Get(std::move(endpoint.c_str()), headers)) {
     if (res->status == 200) {
-      json body = json::parse(res->body);
+      json body = json::parse(res->body).at("data");
       for (json::iterator it = body.begin(); it != body.end(); ++it) {
         sensors.push_back(Sensor(*it));
-        std::cout << *it << '\n';
       }
     } else {
       return std::nullopt;
@@ -32,16 +32,17 @@ std::optional<std::vector<Sensor>> Transceiver::fetch_sensors() {
 
 std::optional<std::unordered_map<unsigned char, Sensor>> Transceiver::fetch_sensor_diff(unsigned long long last_update) {
   std::unordered_map<unsigned char, Sensor> sensor_map;
-  std::string endpoint = "/iot/" + _serial_number + "/sensor_diff/" + std::to_string(last_update);
-  httplib::Headers headers = {{"apiKey", _api_key}};
+  std::string endpoint = "/api/database/sensors/thing/" + _serial_number + "/lastUpdate/" + std::to_string(last_update);
   httplib::Client client(this->_web_address);
+  client.set_read_timeout(100000);
+  httplib::Headers headers = {{"apiKey", _api_key}};
   if (auto res = client.Get(std::move(endpoint.c_str()), headers)) {
     if (res->status == 200) {
-      json body = json::parse(res->body);
+      json body = json::parse(res->body).at("data");
       for (json::iterator it = body.begin(); it != body.end(); ++it) {
-        unsigned char small_id = (*it)["smallId"]; // Handle error here
+        json element = *it; // What if this fails?
+        unsigned char small_id = element.at("smallId");
         sensor_map[small_id] = Sensor(*it);
-        std::cout << *it << '\n';
       }
     } else {
       return std::nullopt;
@@ -53,13 +54,13 @@ std::optional<std::unordered_map<unsigned char, Sensor>> Transceiver::fetch_sens
 }
 
 bool Transceiver::request_session() {
-  std::string endpoint = "/iot/" + _serial_number + "/start";
+  std::string endpoint = "/api/iot/" + _serial_number + "/start";
   httplib::Client client(this->_web_address);
   httplib::Headers headers = {{"apiKey", _api_key}};
   if (auto res = client.Get(std::move(endpoint.c_str()), headers)) {
     json response = json::parse(res->body);
-    _remote_udp_port = response["port"];
-    _remote_udp_address = response["address"];
+    _remote_udp_port = response.at("port");
+    _remote_udp_address = response.at("address");
     // TODO: Create a tcp port in the future to connect to the server
     return true;
   } else {

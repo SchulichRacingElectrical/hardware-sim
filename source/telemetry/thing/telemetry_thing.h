@@ -36,10 +36,15 @@ private:
   std::string _last_line; // Temporary for storing last line of file when writing
 
   /**
-   * @brief Reconciles locally stored sensors and those on the cloud, updates
-   * locally stored sensors on change. Called on construction.
+   * @brief Reads sensor data from disk.
    */
   void _populate_sensors();
+
+  /**
+   * @brief Reconciles locally stored sensors and those on the cloud, updates
+   * locally stored sensors on change. Called on telemetry start.
+   */
+  void _consolidate_sensors();
 
   /**
    * @brief Function for logging what data is being sent and what it contains.
@@ -61,10 +66,9 @@ public:
    */
   void stop_telemetry();
 
-  /**
-   * @brief Temporary friend that allows the CLI to display information about the Thing.
-   */
-  friend int main();
+  friend auto operator<<(std::ostream& os, TelemetryThing const& thing) -> std::ostream& { 
+    return os << thing._serial_number << ", " << thing._name;
+  }
 };
 
 #endif

@@ -19,7 +19,9 @@ TelemetryThing::~TelemetryThing() {
 
 void TelemetryThing::start_telemetry() {
   if (_data_stream == nullptr) {
-    if (_transceiver->request_session()) {
+    this->_consolidate_sensors(); // TODO: Have an error check for this
+    if (_transceiver->request_session())
+    {
       _transceiver->initialize_udp();
       _session_start_time = std::time(nullptr);
       _data_stream = std::make_unique<Stream>(_sensors);
@@ -38,7 +40,9 @@ void TelemetryThing::start_telemetry() {
         _log_transmission(bytes);
       };
       _data_stream->subscribe(id, callback);
-    } else {
+    }
+    else
+    {
       // TODO: What if the session request fails?
     }
   }
@@ -58,7 +62,9 @@ void TelemetryThing::stop_telemetry() {
 void TelemetryThing::_populate_sensors() {
   // Attempt to read the sensors from disk
   _sensors = ThingParser::read_sensors(_serial_number);
+}
 
+void TelemetryThing::_consolidate_sensors() {
   // Find the most recent update time
   unsigned long int most_recent_update = 0;
   for (const auto &sensor : _sensors)

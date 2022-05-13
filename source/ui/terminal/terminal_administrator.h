@@ -7,9 +7,10 @@ Written by Justin Tijunelis
 #include <ostream>
 #include "../state/state_container.h"
 #include "telemetry_handler.h"
-#include "view_handler.h"
 #include <httplib.h>
 #include <filesystem>
+#include <stdlib.h>
+#include "terminal_consts.h"
 
 class TerminalAdministrator {
   private:
@@ -22,6 +23,7 @@ class TerminalAdministrator {
     void print_things();
     void handle_auth();
 
+    bool _quit = false;
     StateContainer _state_container;
 
   public:

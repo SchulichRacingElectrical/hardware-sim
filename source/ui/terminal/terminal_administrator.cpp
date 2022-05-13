@@ -8,9 +8,12 @@ Written by Justin Tijunelis
 void TerminalAdministrator::run() {
   std::filesystem::create_directory("storage");
   this->print_introduction();
-  bool quit = false;
-  while (!quit) {
+  while (!this->_quit) {
+    // Handle auth
     if (!this->_state_container.is_authed()) this->handle_auth();
+    if (this->_quit) break;
+
+    // Handle main program loop
     this->print_intructions();
     std::string line;
     std::getline(std::cin, line);
@@ -18,8 +21,8 @@ void TerminalAdministrator::run() {
       TelemetryHandler handler = TelemetryHandler();
       handler.run();
     } else if (line == "view") {
-      ViewHandler handler = ViewHandler();
-      //handler.run();
+      // In the future, use a view handler class for more complex logic
+      this->_state_container.print_things();
     }
   }
 }
@@ -37,22 +40,21 @@ void TerminalAdministrator::print_introduction() {
 }
 
 void TerminalAdministrator::print_intructions() {
-  std::cout << "Enter 'thing' to a create a new object that will stream telemetry." << std::endl;
-  std::cout << "Enter 'view' to see which 'things' currently exist." << std::endl;
-  std::cout << "Enter 'start' to begin telemetry for your 'things'." << std::endl;
+  std::cout << std::endl;
+  std::cout << "Enter 'view' to see which 'Things' currently exist." << std::endl;
+  std::cout << "Enter 'telemetry' to start a telemetry session." << std::endl;
 }
 
 void TerminalAdministrator::print_loading(std::string message) {
-  // Print in yellow
+  std::cout << YELLOW << message << RESET << std::endl;
 }
 
 void TerminalAdministrator::print_error(std::string message) {
-  // Print in red
+  std::cout << RED << message << RESET << std::endl;
 }
 
 void TerminalAdministrator::print_message(std::string message) {
-  // TODO: Print in green
-  std::cout << message << std::endl;
+  std::cout << GREEN << message << RESET << std::endl;
 }
 
 void TerminalAdministrator::print_auth_request() {
@@ -68,10 +70,13 @@ void TerminalAdministrator::handle_auth() {
     if (this->_state_container.request_auth(line)) {
       this->print_message("The key is valid!");
       bool things_fetched = false;
-      while (!things_fetched) {
-        this->print_loading("Fetching things in your organization...");
-        things_fetched = this->_state_container.fetch_things();
-        if (!things_fetched) this->print_error("Something went wrong, trying again....");
+      this->print_loading("Fetching Things in your organization...");
+      things_fetched = this->_state_container.fetch_things();
+      if (!things_fetched) {
+        this->print_error("Something went wrong. Terminating program.");
+        this->_quit = true;
+      } else {
+        this->print_message("Successfully fetched Things!"); 
       }
     } else {
       this->print_error("API Key is not valid. Please try again.");
