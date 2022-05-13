@@ -17,15 +17,15 @@ TelemetryThing::~TelemetryThing() {
   stop_telemetry();
 }
 
-void TelemetryThing::start_telemetry() {
+bool TelemetryThing::start_telemetry() {
   if (_data_stream == nullptr) {
     if (!this->_consolidate_sensors()) {
-      std::cout << RED << "Failed to fetch sensor for Thing " << this->_name << ", telemetry will not begin for this Thing." << RESET << std::endl;
-      return;
+      std::cout << RED << "Failed to fetch sensors for Thing " << this->_name << ", telemetry will not begin for this Thing." << RESET << std::endl;
+      return false;
     }
     if (this->_sensors.size() == 0) {
       std::cout << RED << "Thing " << this->_name << " has no sensors, telemetry will not begin for this Thing." << RESET << std::endl;
-      return;
+      return false;
     }
     if (_transceiver->request_session()) {
       _transceiver->initialize_udp();
@@ -41,10 +41,11 @@ void TelemetryThing::start_telemetry() {
       _data_stream->subscribe(id, callback);
     } else {
       std::cout << RED << "Failed to create session for Thing " << _name << "." << RESET << std::endl;
-      return;
+      return false;
     }
   }
   _data_stream->open();
+  return true;
 }
 
 void TelemetryThing::stop_telemetry() {

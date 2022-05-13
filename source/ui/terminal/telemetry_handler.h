@@ -14,7 +14,6 @@ Written by Justin Tijunelis
 class TelemetryHandler {
   private:
     void print_instructions();
-    void begin_simulation();
 
     // FUTURE: Pick which things we want to send telemetry for
     // void show_options();

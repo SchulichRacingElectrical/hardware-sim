@@ -14,10 +14,10 @@ Sensor::Sensor(std::vector<std::string> keys, std::vector<std::string> values) {
     std::string key = keys[i];
     if (key == "name") data[key] = values[i];
     else if (key == "smallId") data[key] = std::stoi(values[i]);
-    else if (key == "type") data[key] = (char)std::stoi(values[i]);
+    else if (key == "type") data[key] = values[i];
     else if (key == "lastUpdate") data[key] = std::stoul(values[i]);
     else if (key == "frequency") data[key] = (unsigned char)std::stoul(values[i]);
-    else if (key == "channelId") data[key] = (unsigned int)std::stoul(values[i]);
+    else if (key == "canId") data[key] = (unsigned int)std::stoul(values[i]);
     else if (key == "upperCalibration") data[key] = (unsigned int)std::stoul(values[i]);
     else if (key == "lowerCalibration") data[key] = (unsigned int)std::stoul(values[i]);
   }

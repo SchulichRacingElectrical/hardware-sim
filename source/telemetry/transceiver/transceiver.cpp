@@ -58,11 +58,15 @@ bool Transceiver::request_session() {
   httplib::Client client(this->_web_address);
   httplib::Headers headers = {{"apiKey", _api_key}};
   if (auto res = client.Get(std::move(endpoint.c_str()), headers)) {
-    json response = json::parse(res->body);
-    _remote_udp_port = response.at("port");
-    _remote_udp_address = response.at("address");
-    // TODO: Create a tcp port in the future to connect to the server
-    return true;
+    if (res->status == 200) {
+      json response = json::parse(res->body);
+      _remote_udp_port = response.at("port");
+      _remote_udp_address = response.at("address");
+      // TODO: Create a tcp port in the future to connect to the server
+      return true;
+    } else {
+      return false;
+    }
   } else {
     return false;
   }

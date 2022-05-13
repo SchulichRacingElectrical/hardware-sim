@@ -43,7 +43,8 @@ private:
 
   /**
    * @brief Reconciles locally stored sensors and those on the cloud, updates
-   * locally stored sensors on change. Called on telemetry start.
+   * locally stored sensors on change. Called on telemetry start. Returns true
+   * if the sensors were successfully consolidated.
    */
   bool _consolidate_sensors();
 
@@ -58,8 +59,9 @@ public:
 
   /**
    * @brief Starts the telemetry session. Does nothing if the session is already running.
+   * Returns true if the simulation is started successfully. 
    */
-  void start_telemetry();
+  bool start_telemetry();
 
   /**
    * @brief Stops the telemetry session completely. Destroys the data stream.
