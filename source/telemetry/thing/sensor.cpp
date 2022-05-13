@@ -6,11 +6,10 @@ Written by Justin Tijunelis
 #include "sensor.h"
 #include <iostream>
 
-// There must be a better way to do this...
-// Minor optimization is to move vectors rather than copy them
+// Nasty because it reads from memory
+// Delete this after migrating to thing parser
 Sensor::Sensor(std::vector<std::string> keys, std::vector<std::string> values) {
   json data{};
-  std::set<std::string> doubles{"upperCalibration", "lowerCalibration", "upperBound", "lowerBound"};
   for (int i = 0; i < keys.size(); i++) {
     std::string key = keys[i];
     if (key == "name") data[key] = values[i];
@@ -19,9 +18,10 @@ Sensor::Sensor(std::vector<std::string> keys, std::vector<std::string> values) {
     else if (key == "lastUpdate") data[key] = std::stoul(values[i]);
     else if (key == "frequency") data[key] = (unsigned char)std::stoul(values[i]);
     else if (key == "channelId") data[key] = (unsigned int)std::stoul(values[i]);
-    else if (doubles.find(key) != doubles.end()) data[key] = std::stod(values[i]);
+    else if (key == "upperCalibration") data[key] = (unsigned int)std::stoul(values[i]);
+    else if (key == "lowerCalibration") data[key] = (unsigned int)std::stoul(values[i]);
   }
-  traits = data;
+  this->traits = data;
 }
 
 // There must be a better way to do this too...

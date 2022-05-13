@@ -29,6 +29,7 @@ private:
   std::string _name;
   std::time_t _session_start_time;
   std::string _serial_number;
+  std::string _api_key;
   std::unique_ptr<Stream> _data_stream;
   std::unique_ptr<Transceiver> _transceiver;
   std::vector<Sensor> _sensors;
@@ -47,7 +48,7 @@ private:
 
 public:
   // TODO: Add rvalue and move constructors, avoid copying strings.
-  TelemetryThing(std::string n, std::string sn);
+  TelemetryThing(std::string n, std::string sn, std::string k);
   ~TelemetryThing();
 
   /**

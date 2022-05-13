@@ -10,9 +10,11 @@ Written by Justin Tijunelis
 #include <vector>
 #include <unordered_map>
 #include <iostream>
-// #include <sys/socket.h>
+#include <optional>
 #include <httplib.h>
 #include <json.hpp>
+#include <arpa/inet.h>
+#include <unistd.h>
 
 #ifdef _WIN32
 #include "winsock2.h"
@@ -29,30 +31,34 @@ using json = nlohmann::json;
  */
 class Transceiver {
   private:
+    std::string _api_key;
+
+    // REST request fields
     std::string _serial_number;
-    httplib::Client _client;
+    std::string _web_address = "http://localhost:8080";
     unsigned short _client_tcp_port = -1;
 
+    // UDP socket fields
     int _sockfd;
     unsigned short _remote_udp_port = -1;
     std::string _remote_udp_address;
     struct sockaddr_in _server_address;
 
+    // TODO: TCP socket fields
+
   public:
-    Transceiver(std::string sn) : _serial_number(sn), _client("http://srvelocity.com") {
-      _client.set_keep_alive(true);
-    }
+    Transceiver(std::string sn, std::string key) : _serial_number(sn), _api_key(key) {}
     ~Transceiver();
 
     /**
      * @brief Fetch the entire list of sensors for the particular serial number of a "thing."
      */
-    std::vector<Sensor> fetch_sensors();
+    std::optional<std::vector<Sensor>> fetch_sensors();
 
     /**
      * @brief Fetch the sensors that have changed since the last update 
      */
-    std::unordered_map<unsigned char, Sensor> 
+    std::optional<std::unordered_map<unsigned char, Sensor>>
     fetch_sensor_diff(unsigned long long last_update);
 
     /**
@@ -64,10 +70,10 @@ class Transceiver {
     /**
      * @brief Opens the UDP socket through which compressed data is sent. 
      */
-    void start_session();
+    bool initialize_udp();
 
     /**
-     * @brief Closes the TCP connection that receives messages from the server.
+     * @brief Closes the UDP socket " " " "
      */
     void stop_session();
 

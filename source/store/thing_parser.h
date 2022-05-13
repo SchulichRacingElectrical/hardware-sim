@@ -80,6 +80,8 @@ std::vector<Sensor> ThingParser::read_sensors(
   for (std::string row; std::getline(in_file, row);)
   {
     std::vector<std::string> sensor_values = ThingParser::parse_row(row);
+    // TODO: Create json object from these values to avoid the mess
+    // Be able to delete the nasty sensor constructor too!
     sensors.push_back(Sensor(columnNames, sensor_values)); // TODO: Move data into sensor rather than copy
   }
 

@@ -111,14 +111,16 @@ template<typename T> requires (std::is_arithmetic<T>::value)
 T Channel<T>::_generate_random() {
   srand(time(nullptr));
   int decision = rand() % 2 + 1;
-  switch (decision) {
-    case 1:
-      return _value + 1;
-    case 2:
-      return _value - 1;
-    default:
-      return _value;
-  }
+  return _value + 1;
+  // switch (decision)
+  // {
+  // case 1:
+  //   return _value + 1;
+  // case 2:
+  //   return _value - 1;
+  // default:
+  //   return _value;
+  // }
 }
 
 #endif
