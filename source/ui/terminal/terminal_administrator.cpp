@@ -18,7 +18,7 @@ void TerminalAdministrator::run() {
     std::string line;
     std::getline(std::cin, line);
     if (line == "telemetry") {
-      TelemetryHandler handler = TelemetryHandler();
+      TelemetryHandler handler = TelemetryHandler(&_state_container);
       handler.run();
     } else if (line == "view") {
       // In the future, use a view handler class for more complex logic
@@ -76,7 +76,12 @@ void TerminalAdministrator::handle_auth() {
         this->print_error("Something went wrong. Terminating program.");
         this->_quit = true;
       } else {
-        this->print_message("Successfully fetched Things!"); 
+        if (this->_state_container.get_things().size() == 0) {
+          this->print_error("Your organization has no Things. Create some and come back.");
+          this->_quit = true;
+        } else {
+          this->print_message("Successfully fetched Things!");
+        }
       }
     } else {
       this->print_error("API Key is not valid. Please try again.");

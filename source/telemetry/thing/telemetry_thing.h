@@ -7,6 +7,7 @@ Written by Justin Tijunelis
 #define TELEMETRY_THING_H
 
 #include "sensor.h"
+#include <terminal_consts.h>
 #include <telemetry/transceiver/transceiver.h>
 #include <telemetry/encoder/vfdcp_encoder.h>
 #include <telemetry/stream/stream.h>
@@ -44,7 +45,7 @@ private:
    * @brief Reconciles locally stored sensors and those on the cloud, updates
    * locally stored sensors on change. Called on telemetry start.
    */
-  void _consolidate_sensors();
+  bool _consolidate_sensors();
 
   /**
    * @brief Function for logging what data is being sent and what it contains.
@@ -52,7 +53,6 @@ private:
   void _log_transmission(std::vector<unsigned char> bytes);
 
 public:
-  // TODO: Add rvalue and move constructors, avoid copying strings.
   TelemetryThing(std::string n, std::string sn, std::string k);
   ~TelemetryThing();
 

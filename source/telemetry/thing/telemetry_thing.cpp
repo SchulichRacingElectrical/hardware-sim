@@ -19,31 +19,29 @@ TelemetryThing::~TelemetryThing() {
 
 void TelemetryThing::start_telemetry() {
   if (_data_stream == nullptr) {
-    this->_consolidate_sensors(); // TODO: Have an error check for this
-    if (_transceiver->request_session())
-    {
+    if (!this->_consolidate_sensors()) {
+      std::cout << RED << "Failed to fetch sensor for Thing " << this->_name << ", telemetry will not begin for this Thing." << RESET << std::endl;
+      return;
+    }
+    if (this->_sensors.size() == 0) {
+      std::cout << RED << "Thing " << this->_name << " has no sensors, telemetry will not begin for this Thing." << RESET << std::endl;
+      return;
+    }
+    if (_transceiver->request_session()) {
       _transceiver->initialize_udp();
       _session_start_time = std::time(nullptr);
       _data_stream = std::make_unique<Stream>(_sensors);
       unsigned int id = std::hash<std::thread::id>()(std::this_thread::get_id());
       auto callback = [&](unsigned int timestamp, std::vector<SensorVariantPair> data) {
         std::vector<unsigned char> bytes = VFDCPEncoder::get().encode_data(timestamp, data);
-
-        // Write data to file
         std::string path = "./storage/" + _serial_number + "_" + std::to_string(_session_start_time) + "_data.txt";
         _last_line = ThingWriter::write_sensor_data(_sensors, data, timestamp, _last_line, path);
-
-        // Send data to server
         _transceiver->send_vfdcp_data(bytes);
-
-        // TEMPORARY - Log data
-        _log_transmission(bytes);
       };
       _data_stream->subscribe(id, callback);
-    }
-    else
-    {
-      // TODO: What if the session request fails?
+    } else {
+      std::cout << RED << "Failed to create session for Thing " << _name << "." << RESET << std::endl;
+      return;
     }
   }
   _data_stream->open();
@@ -64,7 +62,7 @@ void TelemetryThing::_populate_sensors() {
   _sensors = ThingParser::read_sensors(_serial_number);
 }
 
-void TelemetryThing::_consolidate_sensors() {
+bool TelemetryThing::_consolidate_sensors() {
   // Find the most recent update time
   unsigned long int most_recent_update = 0;
   for (const auto &sensor : _sensors)
@@ -72,16 +70,15 @@ void TelemetryThing::_consolidate_sensors() {
       most_recent_update = sensor.traits["lastUpdate"];
 
   // Handle no sensors OR fetch potentially updated or new sensors
+  bool success = true;
   if (_sensors.size() == 0) {
-    std::cout << "Fetching sensors from server..." << std::endl;
     std::optional<std::vector<Sensor>> response = _transceiver->fetch_sensors();
     if (response.has_value()) {
       _sensors = response.value();
     } else {
-      std::cout << "Error fetching sensors from server..." << std::endl;
+      success = false;
     }
   } else {
-    std::cout << "Read sensors from disk, checking if there were any updates..." << std::endl;
     std::optional<std::unordered_map<unsigned char, Sensor>> response = _transceiver->fetch_sensor_diff(most_recent_update);
     if (response.has_value()) {
       std::unordered_map<unsigned char, Sensor> sensor_diff = response.value();
@@ -94,12 +91,13 @@ void TelemetryThing::_consolidate_sensors() {
       for (auto new_sensor : sensor_diff)
         _sensors.push_back(new_sensor.second);
     } else {
-      std::cout << "Error fetching sensors from server..." << std::endl; 
+      success = false;
     }
   }
 
   // After reconciling all sensors, write them to disk
   ThingWriter::write_sensors(_sensors, _serial_number);
+  return success;
 }
 
 void TelemetryThing::_log_transmission(std::vector<unsigned char> bytes) {

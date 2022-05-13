@@ -12,14 +12,14 @@ Stream::Stream(std::vector<Sensor>& sensors) {
       [&](auto v) {
         // Create a new channel
         AbstractChannel *channel = new Channel<decltype(v)>(*it);
-        _channels[it->traits["channelId"]] = channel;
+        _channels[it->traits["canId"]] = channel;
         if (_frequency < it->traits["frequency"]) {
           _frequency = it->traits["frequency"];
         }
 
         // Create the stream buffer entry for the channel
         decltype(v) variant_type = 0;
-        _stream_buffer[it->traits["channelId"]] = variant_type;
+        _stream_buffer[it->traits["canId"]] = variant_type;
       },
       it->get_variant()
     );
@@ -71,13 +71,14 @@ void Stream::_tap_channels() noexcept {
             [&](auto last_value) {
               Channel<decltype(last_value)> *channel = dynamic_cast<Channel<decltype(last_value)>*>(_channels[channel_id]);
               auto current_value = channel->read(_timestamp);
-              double upper_bound = channel->sensor.traits["upperBound"];
-              double lower_bound = channel->sensor.traits["lowerBound"];
-              int epsilon = (upper_bound - lower_bound) * 0.005f;
+              // TODO in future
+              // double upper_bound = channel->sensor.traits["upperBound"];
+              // double lower_bound = channel->sensor.traits["lowerBound"];
+              // int epsilon = (upper_bound - lower_bound) * 0.005f;
               if (current_value.has_value()) {
-                if (abs(*current_value - last_value) > epsilon) {
-                  _stream_buffer[channel->sensor.traits["channelId"]] = *current_value;
-                  data.push_back({channel->sensor.traits["channelId"], *current_value});
+                if (abs(*current_value - last_value) > 0) {
+                  _stream_buffer[channel->sensor.traits["canId"]] = *current_value;
+                  data.push_back({channel->sensor.traits["canId"], *current_value});
                 }
               }
             }, 

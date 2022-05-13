@@ -3,14 +3,17 @@ Copyright Schulich Racing, FSAE
 Written by Justin Tijunelis
 */ 
 
+#ifndef TERMINAL_ADMINISTRATOR_H
+#define TERMINAL_ADMINISTRATOR_H
+
 #include <iostream>
 #include <ostream>
-#include "../state/state_container.h"
+#include <terminal_consts.h>
 #include "telemetry_handler.h"
+#include "../state/state_container.h"
 #include <httplib.h>
 #include <filesystem>
 #include <stdlib.h>
-#include "terminal_consts.h"
 
 class TerminalAdministrator {
   private:
@@ -30,3 +33,5 @@ class TerminalAdministrator {
     TerminalAdministrator() { _state_container = StateContainer(); }
     void run();
 };
+
+#endif

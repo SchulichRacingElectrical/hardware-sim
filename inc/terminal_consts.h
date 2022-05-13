@@ -3,6 +3,9 @@ Copyright Schulich Racing, FSAE
 Written by Justin Tijunelis
 */
 
+#ifndef TERMINAL_CONSTS_H
+#define TERMINAL_CONSTS_H
+
 #define RESET   "\033[0m"
 #define RED     "\033[31m"   
 #define GREEN   "\033[32m"    
@@ -11,3 +14,5 @@ Written by Justin Tijunelis
 #define MAGENTA "\033[35m"  
 #define CYAN    "\033[36m"   
 #define WHITE   "\033[37m"    
+
+#endif

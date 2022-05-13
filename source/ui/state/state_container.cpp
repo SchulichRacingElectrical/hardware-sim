@@ -23,7 +23,7 @@ bool StateContainer::request_auth(std::string key) {
   }
 }
 
-bool StateContainer::is_authed() {
+bool StateContainer::is_authed() const {
   return this->_authed;
 }
 
@@ -50,12 +50,20 @@ bool StateContainer::fetch_things() {
   }
 }
 
-void StateContainer::print_things() {
-  std::cout << std::endl;
-  std::cout << "---------------------------------------------" << std::endl;
-  std::cout << BLUE << "Serial Number           , Name" << RESET << std::endl;
-  for (const auto& thing: this->_things) {
-    std::cout << *thing << std::endl;
+const std::vector<std::unique_ptr<TelemetryThing>>& StateContainer::get_things() const {
+  return _things;
+}
+
+void StateContainer::print_things() const {
+  if (this->_things.size() == 0) {
+    std::cout << std::endl;
+    std::cout << RED << "No Things are available." << RESET << std::endl;
+  } else {
+    std::cout << std::endl;
+    std::cout << "---------------------------------------------" << std::endl;
+    std::cout << BLUE << "Serial Number           , Name" << RESET << std::endl;
+    for (const auto& thing: this->_things) 
+      std::cout << *thing << std::endl;
+    std::cout << "---------------------------------------------" << std::endl;
   }
-  std::cout << "---------------------------------------------" << std::endl;
 }

@@ -3,9 +3,12 @@ Copyright Schulich Racing, FSAE
 Written by Justin Tijunelis
 */
 
+#ifndef STATE_CONTAINER_H
+#define STATE_CONTAINER_H
+
 #include <vector>
+#include <terminal_consts.h>
 #include "../../telemetry/thing/telemetry_thing.h"
-#include "../terminal/terminal_consts.h"
 
 // 61c22001-b57e-4294-bceb-b8908cff4e4c
 
@@ -19,7 +22,10 @@ class StateContainer {
   public:
     StateContainer() {}
     bool request_auth(std::string key);
-    bool is_authed();
+    bool is_authed() const;
     bool fetch_things();
-    void print_things();
+    const std::vector<std::unique_ptr<TelemetryThing>>& get_things() const;
+    void print_things() const;
 };
+
+#endif
