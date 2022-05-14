@@ -60,7 +60,7 @@ void TelemetryThing::stop_telemetry() {
 
 void TelemetryThing::_populate_sensors() {
   // Attempt to read the sensors from disk
-  // _sensors = ThingParser::read_sensors(_serial_number);
+  _sensors = ThingParser::read_sensors(_serial_number);
 }
 
 bool TelemetryThing::_consolidate_sensors() {
@@ -97,7 +97,7 @@ bool TelemetryThing::_consolidate_sensors() {
   }
 
   // After reconciling all sensors, write them to disk
-  // ThingWriter::write_sensors(_sensors, _serial_number); TEMP
+  ThingWriter::write_sensors(_sensors, _serial_number); 
   return success;
 }
 
