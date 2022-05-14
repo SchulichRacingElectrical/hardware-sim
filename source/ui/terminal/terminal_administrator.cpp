@@ -17,10 +17,10 @@ void TerminalAdministrator::run() {
     this->print_intructions();
     std::string line;
     std::getline(std::cin, line);
-    if (line == "telemetry") {
+    if (line == "t") {
       TelemetryHandler handler = TelemetryHandler(&_state_container);
       handler.run();
-    } else if (line == "view") {
+    } else if (line == "v") {
       // In the future, use a view handler class for more complex logic
       this->_state_container.print_things();
     }
@@ -41,8 +41,8 @@ void TerminalAdministrator::print_introduction() {
 
 void TerminalAdministrator::print_intructions() {
   std::cout << std::endl;
-  std::cout << "Enter 'view' to see which 'Things' currently exist." << std::endl;
-  std::cout << "Enter 'telemetry' to start a telemetry session." << std::endl;
+  std::cout << "Enter 'v' to see which 'Things' currently exist." << std::endl;
+  std::cout << "Enter 't' to start a telemetry simulation with all the Things." << std::endl;
 }
 
 void TerminalAdministrator::print_loading(std::string message) {

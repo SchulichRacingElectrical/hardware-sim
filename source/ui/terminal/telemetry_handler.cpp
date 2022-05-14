@@ -13,11 +13,11 @@ void TelemetryHandler::run() {
     any_started = any_started || started;
   }
   if (any_started) {
-    std::cout << GREEN << "Telemetry simulation is starting. Enter 'stop' to gracefully shut down." << RESET << std::endl;
+    std::cout << GREEN << "Telemetry simulation is starting. Enter 'q' to gracefully shut down." << RESET << std::endl;
     while (1) {
       std::string line;
       std::getline(std::cin, line);
-      if (line == "stop") {
+      if (line == "q") {
         for (const auto& thing: this->_state_container->get_things()) 
           thing->stop_telemetry();
         std::cout << GREEN << "Telemetry simulation stopped." << RESET << std::endl;
