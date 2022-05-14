@@ -34,8 +34,8 @@ bool TelemetryThing::start_telemetry() {
       unsigned int id = std::hash<std::thread::id>()(std::this_thread::get_id());
       auto callback = [&](unsigned int timestamp, std::vector<SensorVariantPair> data) {
         std::vector<unsigned char> bytes = VFDCPEncoder::get().encode_data(timestamp, data);
-        std::string path = "./storage/" + _serial_number + "_" + std::to_string(_session_start_time) + "_data.txt";
-        _last_line = ThingWriter::write_sensor_data(_sensors, data, timestamp, _last_line, path);
+        // std::string path = "./storage/" + _serial_number + "_" + std::to_string(_session_start_time) + "_data.txt";
+        // _last_line = ThingWriter::write_sensor_data(_sensors, data, timestamp, _last_line, path);
         _transceiver->send_vfdcp_data(bytes);
       };
       _data_stream->subscribe(id, callback);
@@ -60,7 +60,7 @@ void TelemetryThing::stop_telemetry() {
 
 void TelemetryThing::_populate_sensors() {
   // Attempt to read the sensors from disk
-  _sensors = ThingParser::read_sensors(_serial_number);
+  // _sensors = ThingParser::read_sensors(_serial_number);
 }
 
 bool TelemetryThing::_consolidate_sensors() {
@@ -97,7 +97,7 @@ bool TelemetryThing::_consolidate_sensors() {
   }
 
   // After reconciling all sensors, write them to disk
-  ThingWriter::write_sensors(_sensors, _serial_number);
+  // ThingWriter::write_sensors(_sensors, _serial_number); TEMP
   return success;
 }
 

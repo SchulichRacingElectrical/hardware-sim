@@ -27,26 +27,27 @@ Sensor::Sensor(std::vector<std::string> keys, std::vector<std::string> values) {
 // There must be a better way to do this too...
 SensorDataVariant Sensor::get_variant() const {
     SensorDataVariant variant;
-    switch (((SensorType)traits["type"])) {
-      case SensorType::LONGLONG:
+    std::string type = traits["type"];
+    switch (type[0]) {
+      case int(SensorType::LONGLONG):
         variant = (long long)(0);
         return variant;
-      case SensorType::DOUBLE:
+      case int(SensorType::DOUBLE):
         variant = double(0);
         return variant;
-      case SensorType::FLOAT:
+      case int(SensorType::FLOAT):
         variant = float(0);
         return variant;
-      case SensorType::INT:
+      case int(SensorType::INT):
         variant = int(0);
         return variant;
-      case SensorType::SHORT:
+      case int(SensorType::SHORT):
         variant = short(0);
         return variant;
-      case SensorType::CHAR:
+      case int(SensorType::CHAR):
         variant = char(0);
         return variant;
-      case SensorType::BOOL:
+      case int(SensorType::BOOL):
         variant = bool(false);
         return variant;
       default:

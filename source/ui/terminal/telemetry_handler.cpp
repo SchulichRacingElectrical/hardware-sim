@@ -8,8 +8,10 @@ Written by Justin Tijunelis
 void TelemetryHandler::run() {
   this->print_instructions();
   bool any_started = false;
-  for (const auto &thing : this->_state_container->get_things())
-    any_started = any_started || thing->start_telemetry();
+  for (const auto &thing : this->_state_container->get_things()) {
+    bool started = thing->start_telemetry();
+    any_started = any_started || started;
+  }
   if (any_started) {
     std::cout << GREEN << "Telemetry simulation is starting. Enter 'stop' to gracefully shut down." << RESET << std::endl;
     while (1) {

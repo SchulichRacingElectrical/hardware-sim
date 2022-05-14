@@ -78,7 +78,7 @@ void Stream::_tap_channels() noexcept {
               if (current_value.has_value()) {
                 if (abs(*current_value - last_value) > 0) {
                   _stream_buffer[channel->sensor.traits["canId"]] = *current_value;
-                  data.push_back({channel->sensor.traits["canId"], *current_value});
+                  data.push_back({channel->sensor.traits["smallId"], *current_value});
                 }
               }
             }, 

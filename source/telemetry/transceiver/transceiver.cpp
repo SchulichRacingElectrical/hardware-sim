@@ -95,8 +95,9 @@ void Transceiver::send_vfdcp_data(std::vector<unsigned char>& bytes) {
   for (int i = 0; i < bytes.size(); i++) buffer[i] = bytes[i];
   sendto(
     _sockfd, 
-    (const unsigned char*)buffer, bytes.size(), 
-    size_t(0), // TODO: Not sure what this should be
+    (const unsigned char*)buffer, 
+    bytes.size(), 
+    0, // TODO: Not sure what this should be
     (const struct sockaddr *)&_server_address, 
     sizeof(_server_address)
   );
