@@ -53,12 +53,6 @@ SensorDataVariant Sensor::get_variant() const {
       case int(SensorType::FLOAT):
         variant = float(0);
         return variant;
-      case int(SensorType::LONG):
-        variant = long(0);
-        return variant;
-      case int(SensorType::UNSIGNED_LONG):
-        variant = (unsigned long)(0);
-        return variant;
       case int(SensorType::LONG_LONG):
         variant = (long long)(0);
         return variant;

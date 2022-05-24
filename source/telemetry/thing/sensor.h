@@ -30,8 +30,6 @@ using SensorDataVariant =
     int, 
     unsigned int,
     float, 
-    long, 
-    unsigned long, 
     long long, 
     unsigned long long, 
     double
@@ -57,8 +55,6 @@ enum class SensorType : char {
   INT = 'i',
   UNSIGNED_INT = 'I',
   FLOAT = 'f',
-  LONG = 'l',
-  UNSIGNED_LONG = 'L',
   LONG_LONG = 'q',
   UNSIGNED_LONG_LONG = 'Q',
   DOUBLE = 'd',
