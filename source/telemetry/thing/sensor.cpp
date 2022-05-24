@@ -29,26 +29,44 @@ SensorDataVariant Sensor::get_variant() const {
     SensorDataVariant variant;
     std::string type = traits["type"];
     switch (type[0]) {
-      case int(SensorType::LONGLONG):
-        variant = (long long)(0);
+      case int(SensorType::BOOL):
+        variant = bool(false);
         return variant;
-      case int(SensorType::DOUBLE):
-        variant = double(0);
+      case int(SensorType::BYTE):
+        variant = char(0);
         return variant;
-      case int(SensorType::FLOAT):
-        variant = float(0);
-        return variant;
-      case int(SensorType::INT):
-        variant = int(0);
+      case int(SensorType::UNSIGNED_BYTE):
+        variant = (unsigned char)(0);
         return variant;
       case int(SensorType::SHORT):
         variant = short(0);
         return variant;
-      case int(SensorType::CHAR):
-        variant = char(0);
+      case int(SensorType::UNSIGNED_SHORT):
+        variant = (unsigned short)(0);
         return variant;
-      case int(SensorType::BOOL):
-        variant = bool(false);
+      case int(SensorType::INT):
+        variant = int(0);
+        return variant;
+      case int(SensorType::UNSIGNED_INT):
+        variant = (unsigned int)(0);
+        return variant;
+      case int(SensorType::FLOAT):
+        variant = float(0);
+        return variant;
+      case int(SensorType::LONG):
+        variant = long(0);
+        return variant;
+      case int(SensorType::UNSIGNED_LONG):
+        variant = (unsigned long)(0);
+        return variant;
+      case int(SensorType::LONG_LONG):
+        variant = (long long)(0);
+        return variant;
+      case int(SensorType::UNSIGNED_LONG_LONG):
+        variant = (unsigned long long)(0);
+        return variant;
+      case int(SensorType::DOUBLE):
+        variant = double(false);
         return variant;
       default:
         throw std::runtime_error("Sensor does not have a supported type");

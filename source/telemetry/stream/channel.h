@@ -10,6 +10,7 @@ Written by Justin Tijunelis
 #include <optional>
 #include <mutex>
 #include <ctime>
+#include <random>
 
 /**
  * @brief Abstract class that specialized channels inherit from. Used for simplified
@@ -109,18 +110,10 @@ void Channel<T>::close() {
 
 template<typename T> requires (std::is_arithmetic<T>::value)
 T Channel<T>::_generate_random() {
-  srand(time(nullptr));
-  int decision = rand() % 2 + 1;
-  return _value + 1;
-  // switch (decision)
-  // {
-  // case 1:
-  //   return _value + 1;
-  // case 2:
-  //   return _value - 1;
-  // default:
-  //   return _value;
-  // }
+  std::random_device dev;
+  std::mt19937 rng(dev());
+  std::uniform_int_distribution<std::mt19937::result_type> dist6(-2,2);
+  return _value + dist6(rng);
 }
 
 #endif

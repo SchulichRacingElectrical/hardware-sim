@@ -20,7 +20,22 @@ using json = nlohmann::json;
  *  that these datatypes can represent all of our sensors.
  *  In the future, this list may be expanded.
  */
-using SensorDataVariant = std::variant<long long, double, float, int, short, char, bool>;
+using SensorDataVariant = 
+  std::variant<
+    bool, 
+    char, 
+    unsigned char, 
+    short, 
+    unsigned short, 
+    int, 
+    unsigned int,
+    float, 
+    long, 
+    unsigned long, 
+    long long, 
+    unsigned long long, 
+    double
+  >;
 
 /**
  * @brief A tuple (sensor ID, SensorVariantData). 
@@ -31,15 +46,22 @@ using SensorVariantPair = std::tuple<unsigned char, SensorDataVariant>;
 /**
  * @brief Enumeration used to deduce sensor type from the database. May be expanded but 
  * the expansion must be added to SensorDataVariant. 
+ * TODO: Check the os version for size
  */
 enum class SensorType : char {
-  LONGLONG = 'q',
-  DOUBLE = 'd',
-  FLOAT = 'f',
-  INT = 'i',
+  BOOL = '?',
+  BYTE = 'c',
+  UNSIGNED_BYTE = 'B',
   SHORT = 'h',
-  CHAR = 'c',
-  BOOL = '?'
+  UNSIGNED_SHORT = 'H',
+  INT = 'i',
+  UNSIGNED_INT = 'I',
+  FLOAT = 'f',
+  LONG = 'l',
+  UNSIGNED_LONG = 'L',
+  LONG_LONG = 'q',
+  UNSIGNED_LONG_LONG = 'Q',
+  DOUBLE = 'd',
 };
 
 /**

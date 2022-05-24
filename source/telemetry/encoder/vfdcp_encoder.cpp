@@ -4,6 +4,7 @@ Written by Justin Tijunelis
 */ 
 
 #include "vfdcp_encoder.h"
+#include <iostream>
 
 std::vector<unsigned char> VFDCPEncoder::encode_data(
   unsigned int timestamp, // Can this be changed to const ref?
@@ -26,7 +27,7 @@ std::vector<unsigned char> VFDCPEncoder::encode_data(
     size_t current_size;
     std::visit([&](auto v) { current_size = sizeof(v); size += current_size; }, std::get<1>(pair));
   }
-  if (!(size % 4)) size += size % 4;
+  if (size % 4 != 0) size += size % 4;
   size += size_t(data.size()) + 5; // 5 because 1 byte for size byte, 4 bytes for timestamp
 
   // First, let's push the number of sensor values we expect
