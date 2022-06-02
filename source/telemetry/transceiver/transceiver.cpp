@@ -40,6 +40,7 @@ std::optional<std::unordered_map<unsigned char, Sensor>> Transceiver::fetch_sens
     if (res->status == 200) {
       json body = json::parse(res->body).at("data");
       for (json::iterator it = body.begin(); it != body.end(); ++it) {
+        // TODO: Find sensors that need to be deleted!
         json element = *it; // What if this fails?
         unsigned char small_id = element.at("smallId");
         sensor_map[small_id] = Sensor(*it);

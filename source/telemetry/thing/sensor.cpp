@@ -18,8 +18,10 @@ Sensor::Sensor(std::vector<std::string> keys, std::vector<std::string> values) {
     else if (key == "lastUpdate") data[key] = std::stoul(values[i]);
     else if (key == "frequency") data[key] = (unsigned char)std::stoul(values[i]);
     else if (key == "canId") data[key] = (unsigned int)std::stoul(values[i]);
-    else if (key == "upperCalibration") data[key] = (unsigned int)std::stoul(values[i]);
-    else if (key == "lowerCalibration") data[key] = (unsigned int)std::stoul(values[i]);
+    else if (key == "upperCalibration") data[key] = (unsigned int)std::stoul(values[i]); // TODO: This should be double
+    else if (key == "lowerCalibration") data[key] = (unsigned int)std::stoul(values[i]); // TODO: This should be double
+    // TODO: Add lower and upper bound
+    // TODO: Add query param on server to not send data that is not relevant
   }
   this->traits = data;
 }

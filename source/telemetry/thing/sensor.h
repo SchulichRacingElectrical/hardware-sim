@@ -21,18 +21,18 @@ using json = nlohmann::json;
  *  In the future, this list may be expanded.
  */
 using SensorDataVariant = 
-  std::variant<
+  std::variant< 
     bool, 
     char, 
     unsigned char, 
     short, 
     unsigned short, 
     int, 
-    unsigned int,
+    unsigned int, 
     float, 
     long long, 
     unsigned long long, 
-    double
+    double 
   >;
 
 /**

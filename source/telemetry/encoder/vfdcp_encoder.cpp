@@ -37,7 +37,7 @@ std::vector<unsigned char> VFDCPEncoder::encode_data(
   index++;
 
   // Then, we can insert the timestamp
-  unsigned char* timestamp_bytes = reinterpret_cast<unsigned char*>(&timestamp);
+  unsigned char const* timestamp_bytes = reinterpret_cast<unsigned char const*>(&timestamp);
   for (size_t i = 0; i < 4; i++) {
     compressed_data[index] = *(timestamp_bytes + i);
     index++;
@@ -54,7 +54,7 @@ std::vector<unsigned char> VFDCPEncoder::encode_data(
     std::visit(
       [&](auto v) {
         size_t size = sizeof(v);
-        unsigned char* value = reinterpret_cast<unsigned char*>(&v);
+        unsigned char const* value = reinterpret_cast<unsigned char const*>(&v);
         for (size_t i = 0; i < size; i++) {
           compressed_data[index] = *(value + i);
           index++;

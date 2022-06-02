@@ -7,6 +7,7 @@ Written by Justin Tijunelis
 #define CHANNEL_H
 
 #include <telemetry/thing/sensor.h>
+#include <iostream>
 #include <optional>
 #include <mutex>
 #include <ctime>
@@ -112,8 +113,13 @@ template<typename T> requires (std::is_arithmetic<T>::value)
 T Channel<T>::_generate_random() {
   std::random_device dev;
   std::mt19937 rng(dev());
-  std::uniform_int_distribution<std::mt19937::result_type> dist6(-2,2);
-  return _value + dist6(rng);
+  // If type is unsigned, don't allow subtraction
+  std::uniform_int_distribution<int> dist6(-2,2);
+  auto val = dist6(rng);
+  if (std::is_unsigned<T>::value && abs(val) >= _value)
+    return _value + abs(val);
+  else
+    return _value + val;
 }
 
 #endif
