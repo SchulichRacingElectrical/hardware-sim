@@ -11,7 +11,6 @@ Written by Justin Tijunelis
 #include <terminal_consts.h>
 #include "telemetry_handler.h"
 #include "../state/state_container.h"
-#include <httplib.h>
 #include <filesystem>
 #include <stdlib.h>
 

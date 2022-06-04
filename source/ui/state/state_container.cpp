@@ -4,6 +4,9 @@ Written by Justin Tijunelis
 */ 
 
 #include "state_container.h"
+#define CPPHTTPLIB_OPENSSL_SUPPORT
+#include <httplib.h>
+#include <iostream>
 
 bool StateContainer::request_auth(std::string key) {
   std::string endpoint = "/api/database/auth/validate";
@@ -11,11 +14,14 @@ bool StateContainer::request_auth(std::string key) {
   client.set_read_timeout(100);
   httplib::Headers headers = {{"apiKey", key}};
   if (auto res = client.Get(std::move(endpoint.c_str()), headers)) {
-    if (res->status == 200) {
+    if (res->status == 200)
+    {
       this->_api_key = key;
       this->_authed = true;
       return true;
-    } else {
+    }
+    else
+    {
       return false;
     }
   } else {

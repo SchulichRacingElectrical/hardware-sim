@@ -272,9 +272,42 @@ CMAKE_STRIP:FILEPATH=/usr/bin/strip
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
+//Enable to build RPM source packages
+CPACK_SOURCE_RPM:BOOL=OFF
+
+//Enable to build TBZ2 source packages
+CPACK_SOURCE_TBZ2:BOOL=ON
+
+//Enable to build TGZ source packages
+CPACK_SOURCE_TGZ:BOOL=ON
+
+//Enable to build TXZ source packages
+CPACK_SOURCE_TXZ:BOOL=ON
+
+//Enable to build TZ source packages
+CPACK_SOURCE_TZ:BOOL=ON
+
+//Enable to build ZIP source packages
+CPACK_SOURCE_ZIP:BOOL=OFF
+
 //Enable installation of googletest. (Projects embedding googletest
 // may want to turn this OFF.)
 INSTALL_GTEST:BOOL=ON
+
+//Path to a library.
+OPENSSL_CRYPTO_LIBRARY:FILEPATH=/opt/homebrew/Cellar/openssl@3/3.0.3/lib/libcrypto.dylib
+
+//Path to a file.
+OPENSSL_INCLUDE_DIR:PATH=/opt/homebrew/Cellar/openssl@3/3.0.3/include
+
+//Path to a library.
+OPENSSL_SSL_LIBRARY:FILEPATH=/opt/homebrew/Cellar/openssl@3/3.0.3/lib/libssl.dylib
+
+//Arguments to supply to pkg-config
+PKG_CONFIG_ARGN:STRING=
+
+//pkg-config executable
+PKG_CONFIG_EXECUTABLE:FILEPATH=/opt/homebrew/bin/pkg-config
 
 //Value Computed by CMake
 TelemetrySim_BINARY_DIR:STATIC=/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build
@@ -285,6 +318,15 @@ TelemetrySim_IS_TOP_LEVEL:STATIC=ON
 //Value Computed by CMake
 TelemetrySim_SOURCE_DIR:STATIC=/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim
 
+//Dependencies for the target
+TelemetrySim_lib_LIB_DEPENDS:STATIC=general;OpenSSL::SSL;
+
+//Build applications
+WITH_APPS:BOOL=ON
+
+//Dependencies for the target
+crypto_LIB_DEPENDS:STATIC=general;ssl;general;dl;
+
 //Value Computed by CMake
 gmock_BINARY_DIR:STATIC=/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/googletest/googlemock
 
@@ -292,7 +334,7 @@ gmock_BINARY_DIR:STATIC=/Users/justintijunelis/Documents/GitHub.nosync/telemetry
 gmock_IS_TOP_LEVEL:STATIC=OFF
 
 //Dependencies for the target
-gmock_LIB_DEPENDS:STATIC=general;gtest;
+gmock_LIB_DEPENDS:STATIC=general;OpenSSL::SSL;general;gtest;
 
 //Value Computed by CMake
 gmock_SOURCE_DIR:STATIC=/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/lib/googletest/googlemock
@@ -301,7 +343,7 @@ gmock_SOURCE_DIR:STATIC=/Users/justintijunelis/Documents/GitHub.nosync/telemetry
 gmock_build_tests:BOOL=OFF
 
 //Dependencies for the target
-gmock_main_LIB_DEPENDS:STATIC=general;gmock;
+gmock_main_LIB_DEPENDS:STATIC=general;OpenSSL::SSL;general;gmock;
 
 //Value Computed by CMake
 googletest-distribution_BINARY_DIR:STATIC=/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/googletest
@@ -317,6 +359,9 @@ gtest_BINARY_DIR:STATIC=/Users/justintijunelis/Documents/GitHub.nosync/telemetry
 
 //Value Computed by CMake
 gtest_IS_TOP_LEVEL:STATIC=OFF
+
+//Dependencies for the target
+gtest_LIB_DEPENDS:STATIC=general;OpenSSL::SSL;
 
 //Value Computed by CMake
 gtest_SOURCE_DIR:STATIC=/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/lib/googletest/googletest
@@ -338,13 +383,33 @@ gtest_force_shared_crt:BOOL=OFF
 gtest_hide_internal_symbols:BOOL=OFF
 
 //Dependencies for the target
-gtest_main_LIB_DEPENDS:STATIC=general;gtest;
+gtest_main_LIB_DEPENDS:STATIC=general;OpenSSL::SSL;general;gtest;
+
+//Value Computed by CMake
+openssl_BINARY_DIR:STATIC=/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/openssl-cmake
+
+//Value Computed by CMake
+openssl_IS_TOP_LEVEL:STATIC=OFF
+
+//Value Computed by CMake
+openssl_SOURCE_DIR:STATIC=/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/lib/openssl-cmake
+
+//Path to a library.
+pkgcfg_lib__OPENSSL_crypto:FILEPATH=/opt/homebrew/Cellar/openssl@3/3.0.3/lib/libcrypto.dylib
+
+//Path to a library.
+pkgcfg_lib__OPENSSL_ssl:FILEPATH=/opt/homebrew/Cellar/openssl@3/3.0.3/lib/libssl.dylib
+
+//Dependencies for the target
+ssl_LIB_DEPENDS:STATIC=general;crypto;general;crypto;
 
 
 ########################
 # INTERNAL cache entries
 ########################
 
+//Have include fcntl.h
+CHK_DLFCN:INTERNAL=1
 //ADVANCED property for variable: CMAKE_ADDR2LINE
 CMAKE_ADDR2LINE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_AR
@@ -516,17 +581,96 @@ CMAKE_STRIP-ADVANCED:INTERNAL=1
 CMAKE_UNAME:INTERNAL=/usr/bin/uname
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CPACK_SOURCE_RPM
+CPACK_SOURCE_RPM-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CPACK_SOURCE_TBZ2
+CPACK_SOURCE_TBZ2-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CPACK_SOURCE_TGZ
+CPACK_SOURCE_TGZ-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CPACK_SOURCE_TXZ
+CPACK_SOURCE_TXZ-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CPACK_SOURCE_TZ
+CPACK_SOURCE_TZ-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: CPACK_SOURCE_ZIP
+CPACK_SOURCE_ZIP-ADVANCED:INTERNAL=1
+//Details about finding OpenSSL
+FIND_PACKAGE_MESSAGE_DETAILS_OpenSSL:INTERNAL=[/opt/homebrew/Cellar/openssl@3/3.0.3/lib/libcrypto.dylib][/opt/homebrew/Cellar/openssl@3/3.0.3/include][c ][v3.0.3()]
 //Details about finding Python
 FIND_PACKAGE_MESSAGE_DETAILS_Python:INTERNAL=[/Library/Frameworks/Python.framework/Versions/3.10/bin/python3.10][cfound components: Interpreter ][v3.10.2()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
+//Result of TRY_COMPILE
+HAVE_INT:INTERNAL=TRUE
+//Result of TRY_COMPILE
+HAVE_LONG_INT:INTERNAL=TRUE
+//Result of TRY_COMPILE
+HAVE_LONG_LONG_INT:INTERNAL=TRUE
+//Have include stddef.h
+HAVE_STDDEF_H:INTERNAL=1
+//Have include stdint.h
+HAVE_STDINT_H:INTERNAL=1
+//Have include sys/types.h
+HAVE_SYS_TYPES_H:INTERNAL=1
+//CHECK_TYPE_SIZE: sizeof(int)
+INT:INTERNAL=4
+//CHECK_TYPE_SIZE: sizeof(long)
+LONG_INT:INTERNAL=8
+//CHECK_TYPE_SIZE: sizeof(long long)
+LONG_LONG_INT:INTERNAL=8
+//ADVANCED property for variable: OPENSSL_CRYPTO_LIBRARY
+OPENSSL_CRYPTO_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: OPENSSL_INCLUDE_DIR
+OPENSSL_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: OPENSSL_SSL_LIBRARY
+OPENSSL_SSL_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: PKG_CONFIG_ARGN
+PKG_CONFIG_ARGN-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: PKG_CONFIG_EXECUTABLE
+PKG_CONFIG_EXECUTABLE-ADVANCED:INTERNAL=1
 //CMAKE_INSTALL_PREFIX during last run
 _GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=/usr/local
+_OPENSSL_CFLAGS:INTERNAL=-I/opt/homebrew/Cellar/openssl@3/3.0.3/include
+_OPENSSL_CFLAGS_I:INTERNAL=
+_OPENSSL_CFLAGS_OTHER:INTERNAL=
+_OPENSSL_FOUND:INTERNAL=1
+_OPENSSL_INCLUDEDIR:INTERNAL=/opt/homebrew/Cellar/openssl@3/3.0.3/include
+_OPENSSL_INCLUDE_DIRS:INTERNAL=/opt/homebrew/Cellar/openssl@3/3.0.3/include
+_OPENSSL_LDFLAGS:INTERNAL=-L/opt/homebrew/Cellar/openssl@3/3.0.3/lib;-lssl;-lcrypto
+_OPENSSL_LDFLAGS_OTHER:INTERNAL=
+_OPENSSL_LIBDIR:INTERNAL=/opt/homebrew/Cellar/openssl@3/3.0.3/lib
+_OPENSSL_LIBRARIES:INTERNAL=ssl;crypto
+_OPENSSL_LIBRARY_DIRS:INTERNAL=/opt/homebrew/Cellar/openssl@3/3.0.3/lib
+_OPENSSL_LIBS:INTERNAL=
+_OPENSSL_LIBS_L:INTERNAL=
+_OPENSSL_LIBS_OTHER:INTERNAL=
+_OPENSSL_LIBS_PATHS:INTERNAL=
+_OPENSSL_MODULE_NAME:INTERNAL=openssl
+_OPENSSL_PREFIX:INTERNAL=/opt/homebrew/Cellar/openssl@3/3.0.3
+_OPENSSL_STATIC_CFLAGS:INTERNAL=-I/opt/homebrew/Cellar/openssl@3/3.0.3/include
+_OPENSSL_STATIC_CFLAGS_I:INTERNAL=
+_OPENSSL_STATIC_CFLAGS_OTHER:INTERNAL=
+_OPENSSL_STATIC_INCLUDE_DIRS:INTERNAL=/opt/homebrew/Cellar/openssl@3/3.0.3/include
+_OPENSSL_STATIC_LDFLAGS:INTERNAL=-L/opt/homebrew/Cellar/openssl@3/3.0.3/lib;-lssl;-lcrypto
+_OPENSSL_STATIC_LDFLAGS_OTHER:INTERNAL=
+_OPENSSL_STATIC_LIBDIR:INTERNAL=
+_OPENSSL_STATIC_LIBRARIES:INTERNAL=ssl;crypto
+_OPENSSL_STATIC_LIBRARY_DIRS:INTERNAL=/opt/homebrew/Cellar/openssl@3/3.0.3/lib
+_OPENSSL_STATIC_LIBS:INTERNAL=
+_OPENSSL_STATIC_LIBS_L:INTERNAL=
+_OPENSSL_STATIC_LIBS_OTHER:INTERNAL=
+_OPENSSL_STATIC_LIBS_PATHS:INTERNAL=
+_OPENSSL_VERSION:INTERNAL=3.0.3
+_OPENSSL_openssl_INCLUDEDIR:INTERNAL=
+_OPENSSL_openssl_LIBDIR:INTERNAL=
+_OPENSSL_openssl_PREFIX:INTERNAL=
+_OPENSSL_openssl_VERSION:INTERNAL=
 //Path to a program.
 _Python_EXECUTABLE:INTERNAL=/Library/Frameworks/Python.framework/Versions/3.10/bin/python3.10
 //Python Properties
 _Python_INTERPRETER_PROPERTIES:INTERNAL=Python;3;10;2;64;;cpython-310-darwin;/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10;/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10;/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages;/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/site-packages
 _Python_INTERPRETER_SIGNATURE:INTERNAL=5c9eef28087f51fa6876ba7b00dbc150
+__pkg_config_arguments__OPENSSL:INTERNAL=QUIET;openssl
+__pkg_config_checked__OPENSSL:INTERNAL=1
 cmake_package_name:INTERNAL=GTest
 generated_dir:INTERNAL=/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/googletest/googletest/generated
 //ADVANCED property for variable: gmock_build_tests
@@ -541,5 +685,10 @@ gtest_disable_pthreads-ADVANCED:INTERNAL=1
 gtest_force_shared_crt-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: gtest_hide_internal_symbols
 gtest_hide_internal_symbols-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib__OPENSSL_crypto
+pkgcfg_lib__OPENSSL_crypto-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: pkgcfg_lib__OPENSSL_ssl
+pkgcfg_lib__OPENSSL_ssl-ADVANCED:INTERNAL=1
+prefix_result:INTERNAL=/opt/homebrew/Cellar/openssl@3/3.0.3/lib
 targets_export_name:INTERNAL=GTestTargets
 

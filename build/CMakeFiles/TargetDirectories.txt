@@ -1,3 +1,5 @@
+/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/CMakeFiles/package.dir
+/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/CMakeFiles/package_source.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/CMakeFiles/test.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/CMakeFiles/edit_cache.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/CMakeFiles/rebuild_cache.dir
@@ -7,6 +9,8 @@
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/CMakeFiles/install/strip.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/source/CMakeFiles/TelemetrySim_run.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/source/CMakeFiles/TelemetrySim_lib.dir
+/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/source/CMakeFiles/package.dir
+/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/source/CMakeFiles/package_source.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/source/CMakeFiles/test.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/source/CMakeFiles/edit_cache.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/source/CMakeFiles/rebuild_cache.dir
@@ -15,6 +19,8 @@
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/source/CMakeFiles/install/local.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/source/CMakeFiles/install/strip.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/test/CMakeFiles/TelemetrySim_test.dir
+/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/test/CMakeFiles/package.dir
+/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/test/CMakeFiles/package_source.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/test/CMakeFiles/test.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/test/CMakeFiles/edit_cache.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/test/CMakeFiles/rebuild_cache.dir
@@ -22,6 +28,8 @@
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/test/CMakeFiles/install.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/test/CMakeFiles/install/local.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/test/CMakeFiles/install/strip.dir
+/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/googletest/CMakeFiles/package.dir
+/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/googletest/CMakeFiles/package_source.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/googletest/CMakeFiles/test.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/googletest/CMakeFiles/edit_cache.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/googletest/CMakeFiles/rebuild_cache.dir
@@ -31,6 +39,8 @@
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/googletest/CMakeFiles/install/strip.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/googletest/googlemock/CMakeFiles/gmock.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/googletest/googlemock/CMakeFiles/gmock_main.dir
+/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/googletest/googlemock/CMakeFiles/package.dir
+/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/googletest/googlemock/CMakeFiles/package_source.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/googletest/googlemock/CMakeFiles/test.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/googletest/googlemock/CMakeFiles/edit_cache.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/googletest/googlemock/CMakeFiles/rebuild_cache.dir
@@ -40,6 +50,8 @@
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/googletest/googlemock/CMakeFiles/install/strip.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/googletest/googletest/CMakeFiles/gtest.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/googletest/googletest/CMakeFiles/gtest_main.dir
+/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/googletest/googletest/CMakeFiles/package.dir
+/Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/googletest/googletest/CMakeFiles/package_source.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/googletest/googletest/CMakeFiles/test.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/googletest/googletest/CMakeFiles/edit_cache.dir
 /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/lib/googletest/googletest/CMakeFiles/rebuild_cache.dir

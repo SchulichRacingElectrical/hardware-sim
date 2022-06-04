@@ -6,6 +6,7 @@ Written by Justin Tijunelis
 #ifndef STATE_CONTAINER_H
 #define STATE_CONTAINER_H
 
+
 #include <vector>
 #include <terminal_consts.h>
 #include "../../telemetry/thing/telemetry_thing.h"
@@ -14,7 +15,7 @@ Written by Justin Tijunelis
 
 class StateContainer {
   private:
-    std::string _web_address = "http://localhost:5001";
+    std::string _web_address = "http://localhost:8080";
     std::string _api_key;
     std::vector<std::unique_ptr<TelemetryThing>> _things;
     bool _authed;

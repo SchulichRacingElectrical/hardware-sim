@@ -3,6 +3,8 @@ project(TelemetrySim)
 set(CMAKE_CXX_STANDARD 20)
 # set(CMAKE_CXX_FLAGS "-std=c++1z")
 
+find_package(OpenSSL REQUIRED)
+link_libraries(OpenSSL::SSL)
 include_directories(source)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/inc)
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)

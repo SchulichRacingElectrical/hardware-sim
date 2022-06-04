@@ -574,3 +574,87 @@ Parsed CXX implicit link information from above output:
   implicit fwks: [/Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk/System/Library/Frameworks]
 
 
+Determining if the include file sys/types.h exists passed with the following output:
+Change Dir: /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_f1ab3/fast && /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_f1ab3.dir/build.make CMakeFiles/cmTC_f1ab3.dir/build
+Building C object CMakeFiles/cmTC_f1ab3.dir/CheckIncludeFile.c.o
+/usr/bin/clang   -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -MD -MT CMakeFiles/cmTC_f1ab3.dir/CheckIncludeFile.c.o -MF CMakeFiles/cmTC_f1ab3.dir/CheckIncludeFile.c.o.d -o CMakeFiles/cmTC_f1ab3.dir/CheckIncludeFile.c.o -c /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTC_f1ab3
+/opt/homebrew/Cellar/cmake/3.22.1/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f1ab3.dir/link.txt --verbose=1
+/usr/bin/clang  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_f1ab3.dir/CheckIncludeFile.c.o -o cmTC_f1ab3 
+
+
+
+Determining if the include file stdint.h exists passed with the following output:
+Change Dir: /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_1a90c/fast && /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_1a90c.dir/build.make CMakeFiles/cmTC_1a90c.dir/build
+Building C object CMakeFiles/cmTC_1a90c.dir/CheckIncludeFile.c.o
+/usr/bin/clang   -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -MD -MT CMakeFiles/cmTC_1a90c.dir/CheckIncludeFile.c.o -MF CMakeFiles/cmTC_1a90c.dir/CheckIncludeFile.c.o.d -o CMakeFiles/cmTC_1a90c.dir/CheckIncludeFile.c.o -c /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTC_1a90c
+/opt/homebrew/Cellar/cmake/3.22.1/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1a90c.dir/link.txt --verbose=1
+/usr/bin/clang  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_1a90c.dir/CheckIncludeFile.c.o -o cmTC_1a90c 
+
+
+
+Determining if the include file stddef.h exists passed with the following output:
+Change Dir: /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_2a227/fast && /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_2a227.dir/build.make CMakeFiles/cmTC_2a227.dir/build
+Building C object CMakeFiles/cmTC_2a227.dir/CheckIncludeFile.c.o
+/usr/bin/clang   -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -MD -MT CMakeFiles/cmTC_2a227.dir/CheckIncludeFile.c.o -MF CMakeFiles/cmTC_2a227.dir/CheckIncludeFile.c.o.d -o CMakeFiles/cmTC_2a227.dir/CheckIncludeFile.c.o -c /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTC_2a227
+/opt/homebrew/Cellar/cmake/3.22.1/bin/cmake -E cmake_link_script CMakeFiles/cmTC_2a227.dir/link.txt --verbose=1
+/usr/bin/clang  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_2a227.dir/CheckIncludeFile.c.o -o cmTC_2a227 
+
+
+
+Determining size of long passed with the following output:
+Change Dir: /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_e8a95/fast && /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_e8a95.dir/build.make CMakeFiles/cmTC_e8a95.dir/build
+Building C object CMakeFiles/cmTC_e8a95.dir/LONG_INT.c.o
+/usr/bin/clang   -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -MD -MT CMakeFiles/cmTC_e8a95.dir/LONG_INT.c.o -MF CMakeFiles/cmTC_e8a95.dir/LONG_INT.c.o.d -o CMakeFiles/cmTC_e8a95.dir/LONG_INT.c.o -c /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/CMakeFiles/CheckTypeSize/LONG_INT.c
+Linking C executable cmTC_e8a95
+/opt/homebrew/Cellar/cmake/3.22.1/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e8a95.dir/link.txt --verbose=1
+/usr/bin/clang  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_e8a95.dir/LONG_INT.c.o -o cmTC_e8a95 
+
+
+
+Determining size of long long passed with the following output:
+Change Dir: /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_62040/fast && /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_62040.dir/build.make CMakeFiles/cmTC_62040.dir/build
+Building C object CMakeFiles/cmTC_62040.dir/LONG_LONG_INT.c.o
+/usr/bin/clang   -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -MD -MT CMakeFiles/cmTC_62040.dir/LONG_LONG_INT.c.o -MF CMakeFiles/cmTC_62040.dir/LONG_LONG_INT.c.o.d -o CMakeFiles/cmTC_62040.dir/LONG_LONG_INT.c.o -c /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/CMakeFiles/CheckTypeSize/LONG_LONG_INT.c
+Linking C executable cmTC_62040
+/opt/homebrew/Cellar/cmake/3.22.1/bin/cmake -E cmake_link_script CMakeFiles/cmTC_62040.dir/link.txt --verbose=1
+/usr/bin/clang  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_62040.dir/LONG_LONG_INT.c.o -o cmTC_62040 
+
+
+
+Determining size of int passed with the following output:
+Change Dir: /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_90b0d/fast && /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_90b0d.dir/build.make CMakeFiles/cmTC_90b0d.dir/build
+Building C object CMakeFiles/cmTC_90b0d.dir/INT.c.o
+/usr/bin/clang   -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -MD -MT CMakeFiles/cmTC_90b0d.dir/INT.c.o -MF CMakeFiles/cmTC_90b0d.dir/INT.c.o.d -o CMakeFiles/cmTC_90b0d.dir/INT.c.o -c /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/CMakeFiles/CheckTypeSize/INT.c
+Linking C executable cmTC_90b0d
+/opt/homebrew/Cellar/cmake/3.22.1/bin/cmake -E cmake_link_script CMakeFiles/cmTC_90b0d.dir/link.txt --verbose=1
+/usr/bin/clang  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_90b0d.dir/INT.c.o -o cmTC_90b0d 
+
+
+
+Determining if the include file fcntl.h exists passed with the following output:
+Change Dir: /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/CMakeFiles/CMakeTmp
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_be889/fast && /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_be889.dir/build.make CMakeFiles/cmTC_be889.dir/build
+Building C object CMakeFiles/cmTC_be889.dir/CheckIncludeFile.c.o
+/usr/bin/clang   -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -MD -MT CMakeFiles/cmTC_be889.dir/CheckIncludeFile.c.o -MF CMakeFiles/cmTC_be889.dir/CheckIncludeFile.c.o.d -o CMakeFiles/cmTC_be889.dir/CheckIncludeFile.c.o -c /Users/justintijunelis/Documents/GitHub.nosync/telemetry-sim/build/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTC_be889
+/opt/homebrew/Cellar/cmake/3.22.1/bin/cmake -E cmake_link_script CMakeFiles/cmTC_be889.dir/link.txt --verbose=1
+/usr/bin/clang  -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/cmTC_be889.dir/CheckIncludeFile.c.o -o cmTC_be889 
+
+
+
