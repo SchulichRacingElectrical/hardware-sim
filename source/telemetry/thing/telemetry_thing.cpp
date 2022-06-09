@@ -80,9 +80,10 @@ bool TelemetryThing::_consolidate_sensors() {
       success = false;
     }
   } else {
-    std::optional<std::unordered_map<unsigned char, Sensor>> response = _transceiver->fetch_sensor_diff(most_recent_update);
+    SensorDiff response = _transceiver->fetch_sensor_diff(most_recent_update);
     if (response.has_value()) {
-      std::unordered_map<unsigned char, Sensor> sensor_diff = response.value();
+      // Resolve all the updated sensors
+      std::unordered_map<unsigned char, Sensor> sensor_diff = response.value().first;
       for (auto sensor : _sensors) {
         if (sensor_diff.find(sensor.traits["smallId"]) != sensor_diff.end()) {
           std::swap(sensor, sensor_diff[sensor.traits["smallId"]]);
@@ -91,7 +92,18 @@ bool TelemetryThing::_consolidate_sensors() {
       }
       for (auto new_sensor : sensor_diff)
         _sensors.push_back(new_sensor.second);
-    } else {
+
+      // Resolve all the deleted sensors
+      std::vector<Sensor> resolvedSensors{};
+      std::vector<std::string> existing = response.value().second;
+      for (Sensor sensor: _sensors) {
+        if (std::find(existing.begin(), existing.end(), sensor.traits["_id"]) != existing.end()) {
+          resolvedSensors.push_back(sensor);
+        }
+      }
+      _sensors = resolvedSensors;
+    }
+    else {
       success = false;
     }
   }

@@ -23,6 +23,7 @@ Written by Justin Tijunelis
 #endif
 
 using json = nlohmann::json;
+using SensorDiff = std::optional<std::pair<std::unordered_map<unsigned char, Sensor>, std::vector<std::string>>>;
 
 /**
  * @brief Presently incomplete class used for interacting with the server. Uses a combination
@@ -35,7 +36,7 @@ class Transceiver {
 
     // REST request fields
     std::string _serial_number;
-    std::string _web_address = "http://localhost:8080";
+    std::string _web_address = "http://199.116.235.51:8080";
     unsigned short _client_tcp_port = -1;
 
     // UDP socket fields
@@ -58,8 +59,7 @@ class Transceiver {
     /**
      * @brief Fetch the sensors that have changed since the last update 
      */
-    std::optional<std::unordered_map<unsigned char, Sensor>>
-    fetch_sensor_diff(unsigned long long last_update);
+    SensorDiff fetch_sensor_diff(unsigned long long last_update);
 
     /**
      * @brief Requests the server to start a session, gets a UDP port to send to if successful. 

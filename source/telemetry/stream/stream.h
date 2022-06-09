@@ -41,7 +41,8 @@ private:
   std::unordered_map<unsigned int, AbstractChannel*> _channels;
 
   /**
-   * @brief The most recent values of sensors in the system. 
+   * @brief The most recent values of sensors in the system.
+   * The key is the timestamp.
    */
   std::unordered_map<unsigned int, SensorDataVariant> _stream_buffer;
 

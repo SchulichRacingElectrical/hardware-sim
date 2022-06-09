@@ -30,28 +30,32 @@ std::optional<std::vector<Sensor>> Transceiver::fetch_sensors() {
   return sensors;
 }
 
-std::optional<std::unordered_map<unsigned char, Sensor>> Transceiver::fetch_sensor_diff(unsigned long long last_update) {
+SensorDiff Transceiver::fetch_sensor_diff(unsigned long long last_update) {
   std::unordered_map<unsigned char, Sensor> sensor_map;
+  std::vector<std::string> ids;
   std::string endpoint = "/api/database/sensors/thing/" + _serial_number + "/lastUpdate/" + std::to_string(last_update);
   httplib::Client client(this->_web_address);
   client.set_read_timeout(100000);
   httplib::Headers headers = {{"apiKey", _api_key}};
   if (auto res = client.Get(std::move(endpoint.c_str()), headers)) {
     if (res->status == 200) {
-      json body = json::parse(res->body).at("data");
+      // Parse the updated sensors
+      json body = json::parse(res->body).at("data").at("sensors");
       for (json::iterator it = body.begin(); it != body.end(); ++it) {
-        // TODO: Find sensors that need to be deleted!
         json element = *it; // What if this fails?
         unsigned char small_id = element.at("smallId");
         sensor_map[small_id] = Sensor(*it);
       }
+
+      // Get all the sensor ids to consolidate against deleted sensors
+      ids = (std::vector<std::string>)json::parse(res->body).at("data").at("existingSensorIds");
     } else {
       return std::nullopt;
     }
   } else {
     return std::nullopt;
   }
-  return sensor_map;
+  return std::make_pair(sensor_map, ids);
 }
 
 bool Transceiver::request_session() {
