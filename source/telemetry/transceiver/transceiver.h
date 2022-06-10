@@ -36,7 +36,7 @@ class Transceiver {
 
     // REST request fields
     std::string _serial_number;
-    std::string _web_address = "http://199.116.235.51:8080";
+    std::string _web_address = "http://localhost:8080";
     unsigned short _client_tcp_port = -1;
 
     // UDP socket fields

@@ -78,7 +78,6 @@ bool Transceiver::request_session() {
 }
 
 bool Transceiver::initialize_udp() {
-  int sockfd;
   struct sockaddr_in server_address;
   if ((_sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
     return false;

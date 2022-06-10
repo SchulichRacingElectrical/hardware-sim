@@ -15,7 +15,7 @@ Written by Justin Tijunelis
 
 class StateContainer {
   private:
-    std::string _web_address = "http://199.116.235.51:8080";
+    std::string _web_address = "http://localhost:8080";
     std::string _api_key;
     std::vector<std::unique_ptr<TelemetryThing>> _things;
     bool _authed;
