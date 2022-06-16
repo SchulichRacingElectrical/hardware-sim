@@ -113,7 +113,7 @@ template<typename T> requires (std::is_arithmetic<T>::value)
 T Channel<T>::_generate_random() {
   std::random_device dev;
   std::mt19937 rng(dev());
-  // If type is unsigned, don't allow subtraction
+  // If type is unsigned, don't allow subtraction to a negative
   std::uniform_int_distribution<int> dist6(-2,2);
   auto val = dist6(rng);
   if (std::is_unsigned<T>::value && abs(val) >= _value)

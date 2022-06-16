@@ -9,20 +9,20 @@ Stream::Stream(std::vector<Sensor>& sensors) {
   // Create channels and the stream buffer
   for (auto it = sensors.begin(); it != sensors.end(); it++) {
     std::visit(
-      [&](auto v) {
-        // Create a new channel
-        AbstractChannel *channel = new Channel<decltype(v)>(*it);
-        _channels[it->traits["canId"]] = channel;
-        if (_frequency < it->traits["frequency"]) {
-          _frequency = it->traits["frequency"];
-        }
+        [&](auto v)
+        {
+          // Create a new channel
+          AbstractChannel *channel = new Channel<decltype(v)>(*it);
+          _channels[it->traits["smallId"]] = channel;
+          if (_frequency < it->traits["frequency"]) {
+            _frequency = it->traits["frequency"];
+          }
 
-        // Create the stream buffer entry for the channel
-        decltype(v) variant_type = 0;
-        _stream_buffer[it->traits["canId"]] = variant_type;
-      },
-      it->get_variant()
-    );
+          // Create the stream buffer entry for the channel
+          decltype(v) variant_type = 0;
+          _stream_buffer[it->traits["smallId"]] = variant_type;
+        },
+        it->get_variant());
   }
 }
 
@@ -77,7 +77,7 @@ void Stream::_tap_channels() noexcept {
               // int epsilon = (upper_bound - lower_bound) * 0.005f;
               if (current_value.has_value()) {
                 if (abs(float(*current_value - last_value)) > 0) {
-                  _stream_buffer[channel->sensor.traits["canId"]] = *current_value;
+                  _stream_buffer[channel->sensor.traits["smallId"]] = *current_value;
                   data.push_back({channel->sensor.traits["smallId"], *current_value});
                 }
               }
